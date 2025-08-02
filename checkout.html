@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout - FarmNaturals</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary-green: #4a8f29;
+      --dark-green: #2e5721;
+      --cream-white: #fff9f0;
+      --earth-brown: #5c4d3d;
+    }
+
+    body {
+      background-color: var(--cream-white);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--earth-brown);
+    }
+
+    .navbar .nav-link,
+    .navbar .navbar-brand h1,
+    .navbar .navbar-brand p,
+    .navbar .dropdown-item {
+      color: var(--primary-green) !important;
+    }
+
+    .navbar .nav-link:hover,
+    .navbar .dropdown-item:hover {
+      color: var(--dark-green) !important;
+    }
+
+    .btn-checkout {
+      background-color: var(--primary-green);
+      color: white;
+    }
+
+    .btn-checkout:hover {
+      background-color: var(--dark-green);
+      color: white;
+    }
+
+    .checkout-header {
+      background-color: var(--primary-green);
+      color: white;
+      padding: 15px 0;
+      margin-bottom: 30px;
+    }
+
+    .footer {
+      background-color: var(--dark-green);
+      color: white;
+      padding: 60px 0 0;
+    }
+
+    .footer a {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .footer a:hover {
+      color: white !important;
+      text-decoration: underline;
+    }
+
+    .social-icons a:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+      transform: scale(1.1);
+      transition: all 0.3s ease;
+    }
+
+    .social-icons a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    .was-validated .form-control:invalid,
+    .was-validated .form-select:invalid {
+      border-color: #dc3545;
+    }
+
+    .was-validated .form-control:valid,
+    .was-validated .form-select:valid {
+      border-color: #198754;
+    }
+
+    .free-delivery {
+      color: var(--primary-green);
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="index.html">
+        <div class="me-2 d-flex align-items-center justify-content-center rounded-circle"
+          style="width: 40px; height: 40px; background-color: var(--primary-green);">
+          <i class="fas fa-leaf text-white"></i>
+        </div>
+        <div>
+          <h1 class="mb-0" style="font-size: 1.5rem;">FarmNaturals</h1>
+          <p class="mb-0" style="font-size: 0.75rem;">Direct from Farmers</p>
+        </div>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Home</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Checkout Header -->
+  <div class="checkout-header">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 text-center">
+          <h2><i class="fas fa-shopping-basket me-2"></i> Complete Your Order</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Checkout Form -->
+  <div class="container mb-5">
+    <div class="row">
+      <!-- Delivery Information -->
+      <div class="col-lg-7">
+        <div class="card mb-4">
+          <div class="card-header bg-light">
+            <h5 class="mb-0">1. Delivery Information</h5>
+          </div>
+          <div class="card-body">
+            <form id="deliveryForm" novalidate>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="firstName" class="form-label">First Name</label>
+                  <input type="text" class="form-control" id="firstName" required>
+                  <div class="invalid-feedback">Please enter your first name</div>
+                </div>
+                <div class="col-md-6">
+                  <label for="lastName" class="form-label">Last Name</label>
+                  <input type="text" class="form-control" id="lastName" required>
+                  <div class="invalid-feedback">Please enter your last name</div>
+                </div>
+                <div class="col-12">
+                  <label for="email" class="form-label">Email</label>
+                  <input type="email" class="form-control" id="email" required>
+                  <div class="invalid-feedback">Please enter a valid email</div>
+                </div>
+                <div class="col-12">
+                  <label for="phone" class="form-label">Phone Number</label>
+                  <input type="tel" class="form-control" id="phone" required pattern="[0-9]{10}">
+                  <div class="invalid-feedback">Please enter a 10-digit phone number</div>
+                </div>
+                <div class="col-12">
+                  <label for="address" class="form-label">Address</label>
+                  <input type="text" class="form-control" id="address" required>
+                  <div class="invalid-feedback">Please enter your address</div>
+                </div>
+                <div class="col-md-6">
+                  <label for="city" class="form-label">City</label>
+                  <input type="text" class="form-control" id="city" required>
+                  <div class="invalid-feedback">Please enter your city</div>
+                </div>
+                <div class="col-md-4">
+                  <label for="state" class="form-label">State</label>
+                  <select class="form-select" id="state" required>
+                    <option value="" selected disabled>Choose...</option>
+                    <option>Maharashtra</option>
+                    <option>Delhi</option>
+                    <option>Karnataka</option>
+                    <option>Tamil Nadu</option>
+                    <option>Other</option>
+                  </select>
+                  <div class="invalid-feedback">Please select your state</div>
+                </div>
+                <div class="col-md-2">
+                  <label for="zip" class="form-label">ZIP</label>
+                  <input type="text" class="form-control" id="zip" required pattern="[0-9]{6}">
+                  <div class="invalid-feedback">Please enter a 6-digit ZIP code</div>
+                </div>
+                <div class="col-12">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="saveInfo">
+                    <label class="form-check-label" for="saveInfo">
+                      Save this information for next time
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Payment Information -->
+        <div class="card mb-4">
+          <div class="card-header bg-light">
+            <h5 class="mb-0">2. Payment Method</h5>
+          </div>
+          <div class="card-body">
+            <div class="form-check mb-3">
+              <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard" checked>
+              <label class="form-check-label" for="creditCard">
+                <i class="fab fa-cc-visa me-2"></i>Credit/Debit Card
+              </label>
+            </div>
+            <div class="form-check mb-3">
+              <input class="form-check-input" type="radio" name="paymentMethod" id="paytm">
+              <label class="form-check-label" for="paytm">
+                <i class="fas fa-wallet me-2"></i>Paytm/UPI
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="paymentMethod" id="cod">
+              <label class="form-check-label" for="cod">
+                <i class="fas fa-money-bill-wave me-2"></i>Cash on Delivery
+              </label>
+            </div>
+
+            <!-- Credit Card Form -->
+            <div id="creditCardForm" class="mt-4">
+              <div class="row g-3">
+                <div class="col-12">
+                  <label for="cardNumber" class="form-label">Card Number</label>
+                  <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678 9012 3456" required>
+                  <div class="invalid-feedback">Please enter a valid card number</div>
+                </div>
+                <div class="col-md-6">
+                  <label for="expiry" class="form-label">Expiry Date</label>
+                  <input type="text" class="form-control" id="expiry" placeholder="MM/YY" required>
+                  <div class="invalid-feedback">Please enter expiry date</div>
+                </div>
+                <div class="col-md-6">
+                  <label for="cvv" class="form-label">CVV</label>
+                  <input type="text" class="form-control" id="cvv" placeholder="123" required>
+                  <div class="invalid-feedback">Please enter CVV</div>
+                </div>
+                <div class="col-12">
+                  <label for="cardName" class="form-label">Name on Card</label>
+                  <input type="text" class="form-control" id="cardName" placeholder="John Doe" required>
+                  <div class="invalid-feedback">Please enter name on card</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- UPI Form -->
+            <div id="upiForm" class="mt-4 d-none">
+              <div class="alert alert-info">
+                Complete payment using your preferred UPI app by scanning the QR code or entering UPI ID
+              </div>
+              <div class="text-center mb-3">
+                <img src="images/qr.png" alt="UPI QR Code" class="img-fluid"
+                  style="max-width: 200px;">
+              </div>
+              <div class="form-group">
+                <label for="upiId" class="form-label">Or enter UPI ID</label>
+                <input type="text" class="form-control" id="upiId" placeholder="yourname@upi" required>
+                <div class="invalid-feedback">Please enter UPI ID</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Summary -->
+      <div class="col-lg-5">
+        <div class="card sticky-top" style="top: 20px;">
+          <div class="card-header bg-light">
+            <h5 class="mb-0">Order Summary</h5>
+          </div>
+          <div class="card-body">
+            <div id="orderItems">
+              <!-- Cart items will be loaded here -->
+              <div class="text-center py-4">
+                <div class="spinner-border text-success" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              </div>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between mb-2">
+              <span>Subtotal</span>
+              <span id="subtotal">₹0.00</span>
+            </div>
+            <div class="d-flex justify-content-between mb-3" id="deliveryRow">
+              <span>Delivery</span>
+              <span id="delivery">₹0.00</span>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between fw-bold fs-5">
+              <span>Total</span>
+              <span id="total">₹0.00</span>
+            </div>
+            <div id="deliveryMessage" class="text-end small mt-1"></div>
+            <button type="button" class="btn btn-checkout w-100 mt-4" id="placeOrderBtn">
+              <i class="fas fa-lock me-2"></i> Place Order
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-3">
+          <h3 class="text-white mb-4">FarmNaturals</h3>
+          <p class="mb-4">Connecting farmers directly with consumers for fresher produce and better prices.</p>
+          <div class="social-icons">
+            <a href="https://facebook.com/farmnaturals" class="text-white" aria-label="Facebook">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="https://twitter.com/farmnaturals" class="text-white" aria-label="Twitter">
+              <i class="fab fa-twitter"></i>
+            </a>
+            <a href="https://instagram.com/farmnaturals" class="text-white" aria-label="Instagram">
+              <i class="fab fa-instagram"></i>
+            </a>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <h4 class="text-white mb-4">Quick Links</h4>
+          <ul class="list-unstyled">
+            <li class="mb-2"><a href="index.html">Home</a></li>
+            <li class="mb-2"><a href="products.html">Products</a></li>
+            <li class="mb-2"><a href="about.html">About Us</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <h4 class="text-white mb-4">FAQ</h4>
+          <ul class="list-unstyled">
+            <li class="mb-2"><a href="faq.html#shipping">Shipping Information</a></li>
+            <li class="mb-2"><a href="faq.html#returns">Returns & Refunds</a></li>
+            <li class="mb-2"><a href="faq.html#payments">Payment Methods</a></li>
+            <li class="mb-2"><a href="faq.html#quality">Product Quality</a></li>
+            <li class="mb-2"><a href="contact.html">Contact Support</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <h4 class="text-white mb-4">Contact Us</h4>
+          <p class="mb-2">
+            <i class="fas fa-envelope me-2"></i>
+            <a href="mailto:info@farmnaturals.com" class="text-white">info@farmnaturals.com</a>
+          </p>
+          <p class="mb-2">
+            <i class="fas fa-phone me-2"></i>
+            <a href="tel:+919900990099" class="text-white">+91-9900990099</a>
+          </p>
+        </div>
+      </div>
+      <hr class="mt-4 mb-4" style="border-color: rgba(255,255,255,0.1);">
+      <div class="row">
+        <div class="col-md-6 text-center text-md-start">
+          <p class="mb-0">&copy; 2025 FarmNaturals. All rights reserved.</p>
+        </div>
+        <div class="col-md-6 text-center text-md-end">
+          <a href="privacy.html" class="me-3">Privacy Policy</a>
+          <a href="terms.html">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Load cart items from localStorage (not sessionStorage)
+      const cart = JSON.parse(localStorage.getItem('farmNaturalsCart')) || [];
+      const orderItems = document.getElementById('orderItems');
+      const subtotalEl = document.getElementById('subtotal');
+      const deliveryEl = document.getElementById('delivery');
+      const totalEl = document.getElementById('total');
+      const deliveryRow = document.getElementById('deliveryRow');
+      const deliveryMessage = document.getElementById('deliveryMessage');
+      const deliveryFee = 49; // Fixed delivery fee
+      const freeDeliveryThreshold = 250; // Free delivery above this amount
+
+      // Payment method toggle
+      document.querySelectorAll('input[name="paymentMethod"]').forEach(radio => {
+        radio.addEventListener('change', function () {
+          document.getElementById('creditCardForm').classList.add('d-none');
+          document.getElementById('upiForm').classList.add('d-none');
+
+          if (this.id === 'creditCard') {
+            document.getElementById('creditCardForm').classList.remove('d-none');
+          } else if (this.id === 'paytm') {
+            document.getElementById('upiForm').classList.remove('d-none');
+          }
+        });
+      });
+
+      // Display cart items
+      if (cart.length === 0) {
+        orderItems.innerHTML = `
+          <div class="alert alert-warning">
+            Your cart is empty. <a href="products.html" class="alert-link">Continue shopping</a>
+          </div>
+        `;
+        document.getElementById('placeOrderBtn').disabled = true;
+      } else {
+        let html = '';
+        let subtotal = 0;
+
+        cart.forEach(item => {
+          const itemTotal = item.price * item.quantity;
+          subtotal += itemTotal;
+
+          html += `
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <h6 class="mb-0">${item.name}</h6>
+                <small class="text-muted">₹${item.price.toFixed(2)} × ${item.quantity}</small>
+              </div>
+              <div class="text-end">
+                <div class="fw-bold">₹${itemTotal.toFixed(2)}</div>
+              </div>
+            </div>
+          `;
+        });
+
+        orderItems.innerHTML = html;
+
+        // Calculate delivery fee (only if subtotal < 250)
+        let delivery = 0;
+        if (subtotal < freeDeliveryThreshold) {
+          delivery = deliveryFee;
+          deliveryRow.classList.remove('d-none');
+          deliveryMessage.innerHTML = `<span class="text-muted">Add ₹${(freeDeliveryThreshold - subtotal).toFixed(2)} more for free delivery</span>`;
+        } else {
+          deliveryRow.classList.add('d-none');
+          deliveryMessage.innerHTML = `<span class="free-delivery">Free delivery on orders above ₹${freeDeliveryThreshold}</span>`;
+        }
+
+        // Calculate total
+        const total = subtotal + delivery;
+
+        subtotalEl.textContent = `₹${subtotal.toFixed(2)}`;
+        deliveryEl.textContent = `₹${delivery.toFixed(2)}`;
+        totalEl.textContent = `₹${total.toFixed(2)}`;
+
+        // Store complete order data for confirmation page
+        const orderData = {
+          items: cart,
+          subtotal: subtotal.toFixed(2),
+          deliveryFee: delivery.toFixed(2),
+          total: total.toFixed(2),
+          orderNumber: 'FN-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000),
+          orderDate: new Date().toLocaleDateString('en-IN', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          }),
+          deliveryDate: calculateDeliveryDate()
+        };
+        localStorage.setItem('orderData', JSON.stringify(orderData)); // Store in localStorage
+      }
+
+      // Calculate delivery date (3 days from now)
+      function calculateDeliveryDate() {
+        const deliveryDate = new Date();
+        deliveryDate.setDate(deliveryDate.getDate() + 3);
+        return deliveryDate.toLocaleDateString('en-IN', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+      }
+
+      // Place order button
+      document.getElementById('placeOrderBtn').addEventListener('click', function () {
+        // Validate form
+        const form = document.getElementById('deliveryForm');
+        if (!form.checkValidity()) {
+          form.classList.add('was-validated');
+          return;
+        }
+
+        // Validate payment method if not COD
+        const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').id;
+        if (paymentMethod === 'creditCard') {
+          const ccForm = document.getElementById('creditCardForm');
+          if (!validateCreditCardForm()) {
+            return;
+          }
+        } else if (paymentMethod === 'paytm') {
+          const upiForm = document.getElementById('upiForm');
+          if (!validateUPIForm()) {
+            return;
+          }
+        }
+
+        // Get delivery details from form
+        const deliveryDetails = {
+          name: document.getElementById('firstName').value + ' ' + document.getElementById('lastName').value,
+          email: document.getElementById('email').value,
+          phone: document.getElementById('phone').value,
+          address: document.getElementById('address').value,
+          city: document.getElementById('city').value,
+          state: document.getElementById('state').value,
+          zip: document.getElementById('zip').value,
+          paymentMethod: paymentMethod
+        };
+
+        // Update order data with delivery details
+        const orderData = JSON.parse(localStorage.getItem('orderData'));
+        orderData.deliveryDetails = deliveryDetails;
+        orderData.paymentMethod = paymentMethod;
+        localStorage.setItem('orderData', JSON.stringify(orderData));
+
+        // Clear cart (optional: you might want to keep it until order is confirmed by server)
+        localStorage.removeItem('farmNaturalsCart');
+
+        // Redirect to confirmation page
+        window.location.href = 'confirmation.html';
+      });
+
+      function validateCreditCardForm() {
+        const form = document.getElementById('creditCardForm');
+        const inputs = form.querySelectorAll('input[required]');
+        let isValid = true;
+
+        inputs.forEach(input => {
+          if (!input.value.trim()) {
+            input.classList.add('is-invalid');
+            isValid = false;
+          } else {
+            input.classList.remove('is-invalid');
+          }
+        });
+
+        return isValid;
+      }
+
+      function validateUPIForm() {
+        const upiId = document.getElementById('upiId');
+        if (!upiId.value.trim()) {
+          upiId.classList.add('is-invalid');
+          return false;
+        }
+        upiId.classList.remove('is-invalid');
+        return true;
+      }
+    });
+  </script>
+</body>
+
+</html>

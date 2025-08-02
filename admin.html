@@ -1,0 +1,1530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - FarmNaturals</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4CAF50;
+            --primary-dark: #135016;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --danger: #dc3545;
+            --warning: #ffc107;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        .sidebar {
+            background-color: var(--primary-dark);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            width: 250px;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-menu {
+            padding: 0;
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            padding: 10px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-menu li a {
+            color: white;
+            text-decoration: none;
+            display: block;
+        }
+
+        .sidebar-menu li a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-menu li.active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar-menu li i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+
+        .navbar-admin {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-stat {
+            border-radius: 10px;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+
+        .card-stat:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-stat i {
+            font-size: 2rem;
+            opacity: 0.7;
+        }
+
+        .stat-orders i {
+            color: var(--primary);
+        }
+
+        .stat-products i {
+            color: #17a2b8;
+        }
+
+        .stat-revenue i {
+            color: #28a745;
+        }
+
+        .stat-users i {
+            color: #6c757d;
+        }
+
+        .table-responsive {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .badge-out-of-stock {
+            background-color: var(--danger);
+        }
+
+        .badge-low-stock {
+            background-color: var(--warning);
+            color: #212529;
+        }
+
+        .badge-in-stock {
+            background-color: var(--primary);
+        }
+
+        .product-img-thumb {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .btn-admin {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-admin:hover {
+            background-color: var(--primary-dark);
+            color: white;
+        }
+
+        .btn-admin-outline {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-admin-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.25rem rgba(76, 175, 80, 0.25);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                margin-left: -250px;
+            }
+            .sidebar.active {
+                margin-left: 0;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .main-content.active {
+                margin-left: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h4>FarmNaturals Admin</h4>
+        </div>
+        <ul class="sidebar-menu">
+            <li class="active">
+                <a href="#dashboard" data-section="dashboard">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="#products" data-section="products">
+                    <i class="fas fa-shopping-basket"></i> Products
+                </a>
+            </li>
+            <li>
+                <a href="#orders" data-section="orders">
+                    <i class="fas fa-clipboard-list"></i> Orders
+                </a>
+            </li>
+            <li>
+                <a href="#categories" data-section="categories">
+                    <i class="fas fa-tags"></i> Categories
+                </a>
+            </li>
+            <li>
+                <a href="#settings" data-section="settings">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+            </li>
+            <li>
+                <a href="index.html">
+                    <i class="fas fa-sign-out-alt"></i> Back to Store
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="main-content">
+        <!-- Top Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-admin mb-4">
+            <div class="container-fluid">
+                <button class="btn d-lg-none" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="d-flex align-items-center">
+                    <h5 class="mb-0" id="currentSection">Dashboard</h5>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="dropdown">
+                        <a href="#" class="dropdown-toggle d-flex align-items-center" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            <img src="https://via.placeholder.com/40" class="rounded-circle me-2" alt="Admin">
+                            <span>Admin User</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard-section" class="content-section">
+            <div class="row mb-4">
+                <div class="col-md-3 mb-3">
+                    <div class="card card-stat stat-orders">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-muted">Total Orders</h6>
+                                    <h3>128</h3>
+                                    <p class="mb-0 text-success"><small>+12% from last month</small></p>
+                                </div>
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card card-stat stat-products">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-muted">Total Products</h6>
+                                    <h3>56</h3>
+                                    <p class="mb-0 text-info"><small>+5 new this month</small></p>
+                                </div>
+                                <i class="fas fa-shopping-basket"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card card-stat stat-revenue">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-muted">Total Revenue</h6>
+                                    <h3>₹42,580</h3>
+                                    <p class="mb-0 text-success"><small>+18% from last month</small></p>
+                                </div>
+                                <i class="fas fa-rupee-sign"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card card-stat stat-users">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-muted">Total Customers</h6>
+                                    <h3>84</h3>
+                                    <p class="mb-0 text-muted"><small>+8 new this month</small></p>
+                                </div>
+                                <i class="fas fa-users"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-8 mb-4">
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0">Recent Orders</h5>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Order ID</th>
+                                            <th>Customer</th>
+                                            <th>Date</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>FN-2025-1256</td>
+                                            <td>Rahul Sharma</td>
+                                            <td>12 Jun 2025</td>
+                                            <td>₹1,250</td>
+                                            <td><span class="badge bg-success">Delivered</span></td>
+                                            <td><a href="#" class="btn btn-sm btn-admin-outline">View</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>FN-2025-1255</td>
+                                            <td>Priya Patel</td>
+                                            <td>11 Jun 2025</td>
+                                            <td>₹980</td>
+                                            <td><span class="badge bg-primary">Shipped</span></td>
+                                            <td><a href="#" class="btn btn-sm btn-admin-outline">View</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>FN-2025-1254</td>
+                                            <td>Amit Singh</td>
+                                            <td>10 Jun 2025</td>
+                                            <td>₹1,750</td>
+                                            <td><span class="badge bg-warning text-dark">Processing</span></td>
+                                            <td><a href="#" class="btn btn-sm btn-admin-outline">View</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>FN-2025-1253</td>
+                                            <td>Neha Gupta</td>
+                                            <td>09 Jun 2025</td>
+                                            <td>₹2,150</td>
+                                            <td><span class="badge bg-danger">Cancelled</span></td>
+                                            <td><a href="#" class="btn btn-sm btn-admin-outline">View</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>FN-2025-1252</td>
+                                            <td>Vikram Joshi</td>
+                                            <td>08 Jun 2025</td>
+                                            <td>₹850</td>
+                                            <td><span class="badge bg-success">Delivered</span></td>
+                                            <td><a href="#" class="btn btn-sm btn-admin-outline">View</a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0">Low Stock Products</h5>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Stock</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Organic Tomatoes</td>
+                                            <td><span class="badge badge-out-of-stock">Out of Stock</span></td>
+                                            <td><a href="#" class="btn btn-sm btn-admin-outline">Restock</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Alphonso Mangoes</td>
+                                            <td><span class="badge badge-low-stock">Low Stock (5)</span></td>
+                                            <td><a href="#" class="btn btn-sm btn-admin-outline">Restock</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Premium Basmati Rice</td>
+                                            <td><span class="badge badge-low-stock">Low Stock (3)</span></td>
+                                            <td><a href="#" class="btn btn-sm btn-admin-outline">Restock</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Fresh Grapes</td>
+                                            <td><span class="badge badge-in-stock">In Stock (15)</span></td>
+                                            <td><a href="#" class="btn btn-sm btn-admin-outline">View</a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products Section -->
+        <section id="products-section" class="content-section" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4>Product Management</h4>
+                <button class="btn btn-admin" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                    <i class="fas fa-plus me-2"></i> Add Product
+                </button>
+            </div>
+            
+            <div class="card">
+                <div class="card-header bg-white">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <h5 class="mb-0">All Products</h5>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Search products...">
+                                <button class="btn btn-outline-secondary" type="button">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Name</th>
+                                    <th>Category</th>
+                                    <th>Price</th>
+                                    <th>Stock</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><img src="images/tomatoes.jpg" class="product-img-thumb" alt="Organic Tomatoes"></td>
+                                    <td>Organic Tomatoes</td>
+                                    <td>Vegetables</td>
+                                    <td>₹60/kg</td>
+                                    <td>0</td>
+                                    <td><span class="badge badge-out-of-stock">Out of Stock</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-admin-outline me-1" data-bs-toggle="modal" data-bs-target="#editProductModal">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><img src="images/oranges.jpg" class="product-img-thumb" alt="Sweet Oranges"></td>
+                                    <td>Sweet Oranges</td>
+                                    <td>Fruits</td>
+                                    <td>₹80/kg</td>
+                                    <td>25</td>
+                                    <td><span class="badge badge-in-stock">In Stock</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-admin-outline me-1" data-bs-toggle="modal" data-bs-target="#editProductModal">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><img src="images/basmati-rice.jpg" class="product-img-thumb" alt="Premium Basmati Rice"></td>
+                                    <td>Premium Basmati Rice</td>
+                                    <td>Grains</td>
+                                    <td>₹120/kg</td>
+                                    <td>3</td>
+                                    <td><span class="badge badge-low-stock">Low Stock</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-admin-outline me-1" data-bs-toggle="modal" data-bs-target="#editProductModal">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><img src="images/mangoes.jpg" class="product-img-thumb" alt="Alphonso Mangoes"></td>
+                                    <td>Alphonso Mangoes</td>
+                                    <td>Fruits</td>
+                                    <td>₹200/kg</td>
+                                    <td>5</td>
+                                    <td><span class="badge badge-low-stock">Low Stock</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-admin-outline me-1" data-bs-toggle="modal" data-bs-target="#editProductModal">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><img src="images/grapes.jpg" class="product-img-thumb" alt="Fresh Grapes"></td>
+                                    <td>Fresh Grapes</td>
+                                    <td>Fruits</td>
+                                    <td>₹150/kg</td>
+                                    <td>15</td>
+                                    <td><span class="badge badge-in-stock">In Stock</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-admin-outline me-1" data-bs-toggle="modal" data-bs-target="#editProductModal">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer bg-white">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center mb-0">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">Previous</a>
+                            </li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </section>
+
+        <!-- Orders Section -->
+        <section id="orders-section" class="content-section" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4>Order Management</h4>
+                <div class="btn-group">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        Filter Orders
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">All Orders</a></li>
+                        <li><a class="dropdown-item" href="#">Pending</a></li>
+                        <li><a class="dropdown-item" href="#">Processing</a></li>
+                        <li><a class="dropdown-item" href="#">Shipped</a></li>
+                        <li><a class="dropdown-item" href="#">Delivered</a></li>
+                        <li><a class="dropdown-item" href="#">Cancelled</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header bg-white">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <h5 class="mb-0">Recent Orders</h5>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Search orders...">
+                                <button class="btn btn-outline-secondary" type="button">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Date</th>
+                                    <th>Items</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>FN-2025-1256</td>
+                                    <td>Rahul Sharma</td>
+                                    <td>12 Jun 2025</td>
+                                    <td>3</td>
+                                    <td>₹1,250</td>
+                                    <td><span class="badge bg-success">Delivered</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-admin-outline me-1" data-bs-toggle="modal" data-bs-target="#orderDetailsModal">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-admin-outline">
+                                            <i class="fas fa-print"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>FN-2025-1255</td>
+                                    <td>Priya Patel</td>
+                                    <td>11 Jun 2025</td>
+                                    <td>2</td>
+                                    <td>₹980</td>
+                                    <td><span class="badge bg-primary">Shipped</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-admin-outline me-1" data-bs-toggle="modal" data-bs-target="#orderDetailsModal">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-admin-outline">
+                                            <i class="fas fa-print"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>FN-2025-1254</td>
+                                    <td>Amit Singh</td>
+                                    <td>10 Jun 2025</td>
+                                    <td>4</td>
+                                    <td>₹1,750</td>
+                                    <td><span class="badge bg-warning text-dark">Processing</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-admin-outline me-1" data-bs-toggle="modal" data-bs-target="#orderDetailsModal">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-admin-outline">
+                                            <i class="fas fa-print"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>FN-2025-1253</td>
+                                    <td>Neha Gupta</td>
+                                    <td>09 Jun 2025</td>
+                                    <td>5</td>
+                                    <td>₹2,150</td>
+                                    <td><span class="badge bg-danger">Cancelled</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-admin-outline me-1" data-bs-toggle="modal" data-bs-target="#orderDetailsModal">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-admin-outline">
+                                            <i class="fas fa-print"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>FN-2025-1252</td>
+                                    <td>Vikram Joshi</td>
+                                    <td>08 Jun 2025</td>
+                                    <td>2</td>
+                                    <td>₹850</td>
+                                    <td><span class="badge bg-success">Delivered</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-admin-outline me-1" data-bs-toggle="modal" data-bs-target="#orderDetailsModal">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-admin-outline">
+                                            <i class="fas fa-print"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer bg-white">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center mb-0">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">Previous</a>
+                            </li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </section>
+
+        <!-- Categories Section -->
+        <section id="categories-section" class="content-section" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4>Category Management</h4>
+                <button class="btn btn-admin" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+                    <i class="fas fa-plus me-2"></i> Add Category
+                </button>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="mb-0">Vegetables</h5>
+                                <div>
+                                    <button class="btn btn-sm btn-admin-outline me-1" data-bs-toggle="modal" data-bs-target="#editCategoryModal">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <p class="text-muted mb-2">12 products</p>
+                            <div class="progress" style="height: 8px;">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 75%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="mb-0">Fruits</h5>
+                                <div>
+                                    <button class="btn btn-sm btn-admin-outline me-1" data-bs-toggle="modal" data-bs-target="#editCategoryModal">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <p class="text-muted mb-2">8 products</p>
+                            <div class="progress" style="height: 8px;">
+                                <div class="progress-bar bg-info" role="progressbar" style="width: 50%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="mb-0">Dairy</h5>
+                                <div>
+                                    <button class="btn btn-sm btn-admin-outline me-1" data-bs-toggle="modal" data-bs-target="#editCategoryModal">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <p class="text-muted mb-2">6 products</p>
+                            <div class="progress" style="height: 8px;">
+                                <div class="progress-bar bg-warning" role="progressbar" style="width: 40%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="mb-0">Grains</h5>
+                                <div>
+                                    <button class="btn btn-sm btn-admin-outline me-1" data-bs-toggle="modal" data-bs-target="#editCategoryModal">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <p class="text-muted mb-2">5 products</p>
+                            <div class="progress" style="height: 8px;">
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: 35%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="mb-0">Organic</h5>
+                                <div>
+                                    <button class="btn btn-sm btn-admin-outline me-1" data-bs-toggle="modal" data-bs-target="#editCategoryModal">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <p class="text-muted mb-2">4 products</p>
+                            <div class="progress" style="height: 8px;">
+                                <div class="progress-bar bg-danger" role="progressbar" style="width: 25%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Settings Section -->
+        <section id="settings-section" class="content-section" style="display: none;">
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0">Store Settings</h5>
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <div class="mb-3">
+                                    <label for="storeName" class="form-label">Store Name</label>
+                                    <input type="text" class="form-control" id="storeName" value="FarmNaturals">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="storeEmail" class="form-label">Store Email</label>
+                                    <input type="email" class="form-control" id="storeEmail" value="info@farmnaturals.com">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="storePhone" class="form-label">Store Phone</label>
+                                    <input type="tel" class="form-control" id="storePhone" value="+91-9900990099">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="storeAddress" class="form-label">Store Address</label>
+                                    <textarea class="form-control" id="storeAddress" rows="3">123 Farm Road, Agricultural Zone, Maharashtra, India - 400001</textarea>
+                                </div>
+                                <button type="submit" class="btn btn-admin">Save Settings</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0">Delivery Settings</h5>
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <div class="mb-3">
+                                    <label for="deliveryFee" class="form-label">Delivery Fee (₹)</label>
+                                    <input type="number" class="form-control" id="deliveryFee" value="49">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="freeDeliveryThreshold" class="form-label">Free Delivery Threshold (₹)</label>
+                                    <input type="number" class="form-control" id="freeDeliveryThreshold" value="250">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="deliveryDays" class="form-label">Estimated Delivery Days</label>
+                                    <input type="number" class="form-control" id="deliveryDays" value="3">
+                                </div>
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="checkbox" id="codEnabled" checked>
+                                    <label class="form-check-label" for="codEnabled">
+                                        Enable Cash on Delivery
+                                    </label>
+                                </div>
+                                <button type="submit" class="btn btn-admin">Save Settings</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Add Product Modal -->
+   <section id="products-section" class="content-section" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4>Product Management</h4>
+                <button class="btn btn-admin" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                    <i class="fas fa-plus me-2"></i> Add Product
+                </button>
+            </div>
+            
+            <div class="card">
+                <div class="card-header bg-white">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <h5 class="mb-0">All Products</h5>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Search products...">
+                                <button class="btn btn-outline-secondary" type="button">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Name</th>
+                                    <th>Category</th>
+                                    <th>Price</th>
+                                    <th>Stock</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><img src="images/tomatoes.jpg" class="product-img-thumb" alt="Organic Tomatoes"></td>
+                                    <td>Organic Tomatoes</td>
+                                    <td>Vegetables</td>
+                                    <td>₹60/kg</td>
+                                    <td>0 kg</td>
+                                    <td><span class="badge badge-out-of-stock">Out of Stock</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-admin-outline me-1" data-bs-toggle="modal" data-bs-target="#editProductModal">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><img src="images/oranges.jpg" class="product-img-thumb" alt="Sweet Oranges"></td>
+                                    <td>Sweet Oranges</td>
+                                    <td>Fruits</td>
+                                    <td>₹80/kg</td>
+                                    <td>25 kg</td>
+                                    <td><span class="badge badge-in-stock">In Stock</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-admin-outline me-1" data-bs-toggle="modal" data-bs-target="#editProductModal">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><img src="images/basmati-rice.jpg" class="product-img-thumb" alt="Premium Basmati Rice"></td>
+                                    <td>Premium Basmati Rice</td>
+                                    <td>Grains</td>
+                                    <td>₹120/kg</td>
+                                    <td>3 kg</td>
+                                    <td><span class="badge badge-low-stock">Low Stock</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-admin-outline me-1" data-bs-toggle="modal" data-bs-target="#editProductModal">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><img src="images/mangoes.jpg" class="product-img-thumb" alt="Alphonso Mangoes"></td>
+                                    <td>Alphonso Mangoes</td>
+                                    <td>Fruits</td>
+                                    <td>₹200/kg</td>
+                                    <td>5 kg</td>
+                                    <td><span class="badge badge-low-stock">Low Stock</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-admin-outline me-1" data-bs-toggle="modal" data-bs-target="#editProductModal">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><img src="images/grapes.jpg" class="product-img-thumb" alt="Fresh Grapes"></td>
+                                    <td>Fresh Grapes</td>
+                                    <td>Fruits</td>
+                                    <td>₹150/kg</td>
+                                    <td>15 kg</td>
+                                    <td><span class="badge badge-in-stock">In Stock</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-admin-outline me-1" data-bs-toggle="modal" data-bs-target="#editProductModal">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer bg-white">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center mb-0">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">Previous</a>
+                            </li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            
+        </section>
+        <!-- Add Product Modal -->
+<div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addProductModalLabel">Add New Product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addProductForm">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="productName" class="form-label">Product Name</label>
+                            <input type="text" class="form-control" id="productName" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="productCategory" class="form-label">Category</label>
+                            <select class="form-select" id="productCategory" required>
+                                <option value="">Select Category</option>
+                                <option>Vegetables</option>
+                                <option>Fruits</option>
+                                <option>Dairy</option>
+                                <option>Grains</option>
+                                <option>Organic</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Price Field with kg/g selection -->
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="productPrice" class="form-label">Price (₹)</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="productPrice" step="0.01" required>
+                                <select class="form-select" id="priceUnit" style="max-width: 100px;">
+                                    <option value="kg">per kg</option>
+                                    <option value="g">per 100g</option>
+                                    <option value="each">per unit</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- Stock Field with kg/g selection -->
+                        <div class="col-md-6 mb-3">
+                            <label for="productStock" class="form-label">Stock</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="productStock" step="0.1" required>
+                                <select class="form-select" id="stockUnit" style="max-width: 100px;">
+                                    <option value="kg">kg</option>
+                                    <option value="g">g</option>
+                                    <option value="units">units</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="productDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="productDescription" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="productImage" class="form-label">Product Image</label>
+                        <input class="form-control" type="file" id="productImage" required>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="productFeatured">
+                        <label class="form-check-label" for="productFeatured">
+                            Featured Product
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-admin">Add Product</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Order Details Modal -->
+    <div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="orderDetailsModalLabel">Order Details - FN-2025-1256</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h6>Customer Information</h6>
+                            <p>
+                                <strong>Rahul Sharma</strong><br>
+                                rahul.sharma@example.com<br>
+                                9876543210<br>
+                                123 Garden Apartments, Mumbai, Maharashtra - 400001
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Order Information</h6>
+                            <p>
+                                <strong>Order Date:</strong> 12 Jun 2025<br>
+                                <strong>Order Status:</strong> <span class="badge bg-success">Delivered</span><br>
+                                <strong>Payment Method:</strong> Credit Card<br>
+                                <strong>Delivery Date:</strong> 15 Jun 2025
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="table-responsive mb-4">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Organic Tomatoes</td>
+                                    <td>₹60/kg</td>
+                                    <td>2</td>
+                                    <td>₹120</td>
+                                </tr>
+                                <tr>
+                                    <td>Sweet Oranges</td>
+                                    <td>₹80/kg</td>
+                                    <td>1</td>
+                                    <td>₹80</td>
+                                </tr>
+                                <tr>
+                                    <td>Premium Basmati Rice</td>
+                                    <td>₹120/kg</td>
+                                    <td>1</td>
+                                    <td>₹120</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3" class="text-end"><strong>Subtotal:</strong></td>
+                                    <td>₹320</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" class="text-end"><strong>Delivery Fee:</strong></td>
+                                    <td>₹49</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                                    <td>₹369</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="orderStatus" class="form-label">Update Order Status</label>
+                        <select class="form-select" id="orderStatus">
+                            <option selected>Delivered</option>
+                            <option>Processing</option>
+                            <option>Shipped</option>
+                            <option>Cancelled</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-admin">Update Status</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Category Modal -->
+    <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addCategoryModalLabel">Add New Category</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="categoryName" class="form-label">Category Name</label>
+                            <input type="text" class="form-control" id="categoryName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="categoryDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="categoryDescription" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="categoryImage" class="form-label">Category Image</label>
+                            <input class="form-control" type="file" id="categoryImage">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-admin">Add Category</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Category Modal -->
+    <div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editCategoryModalLabel">Edit Category</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="editCategoryName" class="form-label">Category Name</label>
+                            <input type="text" class="form-control" id="editCategoryName" value="Vegetables" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editCategoryDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="editCategoryDescription" rows="3">Fresh vegetables from local farms</textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editCategoryImage" class="form-label">Category Image</label>
+                            <input class="form-control" type="file" id="editCategoryImage">
+                            <small class="text-muted">Current image: vegetables.jpg</small>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-admin">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Farmer Modal -->
+    <div class="modal fade" id="addFarmerModal" tabindex="-1" aria-labelledby="addFarmerModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addFarmerModalLabel">Add New Farmer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="farmerFirstName" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="farmerFirstName" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="farmerLastName" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="farmerLastName" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="farmerEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="farmerEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="farmerPhone" class="form-label">Phone</label>
+                            <input type="tel" class="form-control" id="farmerPhone" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="farmerAddress" class="form-label">Address</label>
+                            <textarea class="form-control" id="farmerAddress" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="farmerProducts" class="form-label">Products</label>
+                            <select class="form-select" id="farmerProducts" multiple>
+                                <option>Vegetables</option>
+                                <option>Fruits</option>
+                                <option>Dairy</option>
+                                <option>Grains</option>
+                                <option>Organic</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="farmerImage" class="form-label">Profile Image</label>
+                            <input class="form-control" type="file" id="farmerImage">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-admin">Add Farmer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Farmer Details Modal -->
+    <div class="modal fade" id="farmerDetailsModal" tabindex="-1" aria-labelledby="farmerDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="farmerDetailsModalLabel">Farmer Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-4">
+                        <img src="https://via.placeholder.com/150" class="rounded-circle mb-3" alt="Farmer">
+                        <h4>Rajesh Kumar</h4>
+                        <p class="text-muted">Nashik, Maharashtra</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6>Contact Information</h6>
+                        <p>
+                            <strong>Email:</strong> rajesh.kumar@example.com<br>
+                            <strong>Phone:</strong> 9876543210<br>
+                            <strong>Address:</strong> 123 Farm Lane, Nashik, Maharashtra - 422001
+                        </p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6>Products</h6>
+                        <p>Vegetables, Fruits</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6>Status</h6>
+                        <p><span class="badge bg-success">Active</span></p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6>Recent Supplies</h6>
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Organic Tomatoes
+                                <span class="badge bg-primary rounded-pill">25 kg</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Sweet Oranges
+                                <span class="badge bg-primary rounded-pill">15 kg</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Fresh Spinach
+                                <span class="badge bg-primary rounded-pill">10 kg</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Customer Details Modal -->
+    <div class="modal fade" id="customerDetailsModal" tabindex="-1" aria-labelledby="customerDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="customerDetailsModalLabel">Customer Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-4">
+                        <img src="https://via.placeholder.com/150" class="rounded-circle mb-3" alt="Customer">
+                        <h4>Rahul Sharma</h4>
+                        <p class="text-muted">Mumbai, Maharashtra</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6>Contact Information</h6>
+                        <p>
+                            <strong>Email:</strong> rahul.sharma@example.com<br>
+                            <strong>Phone:</strong> 9876543210<br>
+                            <strong>Address:</strong> 123 Garden Apartments, Mumbai, Maharashtra - 400001
+                        </p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6>Order History</h6>
+                        <p><strong>Total Orders:</strong> 5</p>
+                        <p><strong>Total Spent:</strong> ₹4,250</p>
+                        <p><strong>Last Order:</strong> FN-2025-1256 (₹1,250)</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6>Account Information</h6>
+                        <p>
+                            <strong>Member Since:</strong> 15 Mar 2025<br>
+                            <strong>Preferred Payment:</strong> Credit Card<br>
+                            <strong>Delivery Preference:</strong> Evening (5-8 PM)
+                        </p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    
+    </script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const API_BASE = "http://localhost:8000";
+    const token = localStorage.getItem("adminToken");
+
+    // Add Category Button Submit
+    const addCategoryForm = document.getElementById("addCategoryForm");
+    if (addCategoryForm) {
+        addCategoryForm.addEventListener("submit", async function (e) {
+            e.preventDefault();
+            const formData = new FormData(addCategoryForm);
+            try {
+                const res = await fetch(`${API_BASE}/admin/api/categories`, {
+                    method: "POST",
+                    headers: { Authorization: "Bearer " + token },
+                    body: formData
+                });
+
+                if (res.ok) {
+                    alert("✅ Category added successfully!");
+                    addCategoryForm.reset();
+                    const modal = bootstrap.Modal.getInstance(document.getElementById("addCategoryModal"));
+                    modal.hide();
+                    loadCategories();
+                } else {
+                    const err = await res.json();
+                    alert("❌ Error: " + (err.detail || "Unknown error"));
+                }
+            } catch (err) {
+                console.error("Error:", err);
+                alert("❌ Failed to add category");
+            }
+        });
+    }
+
+    // Load categories
+    async function loadCategories() {
+        try {
+            const res = await fetch(`${API_BASE}/admin/api/categories`, {
+                headers: { Authorization: "Bearer " + token }
+            });
+            const categories = await res.json();
+            const container = document.querySelector("#categories-section .row");
+            container.innerHTML = "";
+            categories.forEach(category => {
+                container.innerHTML += `
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 class="mb-0">${category.name}</h5>
+                                    <div>
+                                        <button class="btn btn-sm btn-admin-outline me-1" onclick="editCategory(${category.id})"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-sm btn-danger" onclick="deleteCategory(${category.id})"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </div>
+                                <p class="text-muted mb-2">${category.description || ""}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        } catch (err) {
+            console.error("Load categories error:", err);
+            alert("❌ Failed to load categories");
+        }
+    }
+    window.loadCategories = loadCategories;
+
+    const categoriesLink = document.querySelector('[data-section="categories"]');
+    if (categoriesLink) {
+        categoriesLink.addEventListener("click", loadCategories);
+    }
+});
+</script>
+
+</body>
+</html>

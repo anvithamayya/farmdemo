@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation - FarmNaturals</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-green: #4a8f29;
+            --dark-green: #2e5721;
+            --cream-white: #fff9f0;
+            --earth-brown: #5c4d3d;
+        }
+
+        body {
+            background-color: var(--cream-white);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--earth-brown);
+        }
+
+        .confirmation-card {
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: none;
+        }
+
+        .success-icon {
+            color: var(--primary-green);
+        }
+
+        .navbar .nav-link,
+        .navbar .navbar-brand h1,
+        .navbar .navbar-brand p,
+        .navbar .dropdown-item {
+            color: var(--primary-green) !important;
+        }
+
+        .btn-back {
+            background-color: var(--primary-green);
+            color: white;
+        }
+
+        .btn-back:hover {
+            background-color: var(--dark-green);
+            color: white;
+        }
+
+        .footer {
+            background-color: var(--dark-green);
+            color: white;
+            padding: 60px 0 0;
+        }
+        
+        .free-delivery-badge {
+            background-color: var(--primary-green);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            margin-left: 8px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="index.html">
+                <div class="me-2 d-flex align-items-center justify-content-center rounded-circle" style="width: 40px; height: 40px; background-color: var(--primary-green);">
+                    <i class="fas fa-leaf text-white"></i>
+                </div>
+                <div>
+                    <h1 class="mb-0" style="font-size: 1.5rem;">FarmNaturals</h1>
+                    <p class="mb-0" style="font-size: 0.75rem;">Direct from Farmers</p>
+                </div>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Confirmation Content -->
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="confirmation-card card p-4 text-center">
+                    <!-- Success Icon -->
+                    <div class="mb-4 success-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                        </svg>
+                    </div>
+
+                    <h2 class="mb-3">Thank You For Your Order!</h2>
+                    <p class="text-muted mb-4">Your order is confirmed. A receipt has been sent to your email.</p>
+
+                    <!-- Order Summary -->
+                    <div class="card bg-light mb-4">
+                        <div class="card-body text-start">
+                            <h5 class="card-title">Order Summary</h5>
+                            <hr>
+                            <p><strong>Order ID:</strong> <span id="orderId">#12345</span></p>
+                            <p><strong>Order Date:</strong> <span id="orderDate">June 23, 2025</span></p>
+                            <p><strong>Estimated Delivery:</strong> <span id="deliveryDate">June 26, 2025</span></p>
+                            <p><strong>Payment Method:</strong> <span id="paymentMethod">Credit Card</span></p>
+                            <hr>
+                            
+                            <!-- Order Items (without images) -->
+                            <h6 class="mb-3">Items Ordered</h6>
+                            <div id="orderItemsList"></div>
+                            
+                            <hr>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Subtotal:</span>
+                                <span id="subtotal">₹0.00</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Delivery Fee:</span>
+                                <span id="deliveryFee">₹49.00</span>
+                            </div>
+                            <hr>
+                            <div class="d-flex justify-content-between fw-bold">
+                                <span>Total:</span>
+                                <span id="total">₹0.00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Delivery Information -->
+                    <div class="card bg-light mb-4 text-start">
+                        <div class="card-body">
+                            <h5 class="card-title">Delivery Information</h5>
+                            <hr>
+                            <p id="deliveryName"></p>
+                            <p id="deliveryAddress"></p>
+                            <p id="deliveryCityState"></p>
+                            <p id="deliveryContact"></p>
+                        </div>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                        <a href="index.html" class="btn btn-back px-4">
+                            <i class="fas fa-home me-2"></i> Back to Home
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-3">
+                    <h3 class="text-white mb-4">FarmNaturals</h3>
+                    <p class="mb-4">Connecting farmers directly with consumers for fresher produce and better prices.</p>
+                    <div class="social-icons">
+                        <a href="#" class="text-white"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h4 class="text-white mb-4">Quick Links</h4>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="index.html" class="text-white-50">Home</a></li>
+                        <li class="mb-2"><a href="index.html" class="text-white-50">Products</a></li>
+                        <li class="mb-2"><a href="about.html" class="text-white-50">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h4 class="text-white mb-4">FAQ</h4>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-white-50">Shipping Information</a></li>
+                        <li class="mb-2"><a href="#" class="text-white-50">Returns & Refunds</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h4 class="text-white mb-4">Contact Us</h4>
+                    <p class="mb-2"><i class="fas fa-envelope me-2"></i> info@farmnaturals.com</p>
+                    <p class="mb-2"><i class="fas fa-phone me-2"></i> +91-9900990099</p>
+                </div>
+            </div>
+            <hr class="mt-4 mb-4" style="border-color: rgba(255,255,255,0.1);">
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="mb-0">&copy; 2025 FarmNaturals. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <a href="#" class="me-3 text-white-50">Privacy Policy</a>
+                    <a href="#" class="text-white-50">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript to Load Order Data -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get order data from localStorage
+            const orderData = JSON.parse(localStorage.getItem('orderData'));
+            
+            if (!orderData) {
+                // If no order data found, redirect to home page
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Display order information
+            document.getElementById('orderId').textContent = orderData.orderNumber;
+            document.getElementById('orderDate').textContent = orderData.orderDate;
+            document.getElementById('deliveryDate').textContent = orderData.deliveryDate;
+            document.getElementById('paymentMethod').textContent = 
+                orderData.paymentMethod === 'creditCard' ? 'Credit/Debit Card' : 
+                orderData.paymentMethod === 'paytm' ? 'Paytm/UPI' : 'Cash on Delivery';
+            
+            // Display order items (without images)
+            const orderItemsList = document.getElementById('orderItemsList');
+            let itemsHtml = '';
+            
+            orderData.items.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                itemsHtml += `
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <h6 class="mb-0">${item.name}</h6>
+                            <small class="text-muted">₹${item.price.toFixed(2)} × ${item.quantity}</small>
+                        </div>
+                        <div class="text-end">
+                            <div class="fw-bold">₹${itemTotal.toFixed(2)}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            orderItemsList.innerHTML = itemsHtml;
+            
+            // Calculate delivery fee based on subtotal
+            const subtotal = parseFloat(orderData.subtotal);
+            const deliveryFee = subtotal >= 250 ? 0 : 49;
+            const total = subtotal + deliveryFee;
+            
+            // Display totals
+            document.getElementById('subtotal').textContent = `₹${subtotal.toFixed(2)}`;
+            
+            const deliveryFeeElement = document.getElementById('deliveryFee');
+            if (deliveryFee === 0) {
+                deliveryFeeElement.innerHTML = '<span class="free-delivery-badge">Free Delivery</span>';
+            } else {
+                deliveryFeeElement.textContent = `₹${deliveryFee.toFixed(2)}`;
+            }
+            
+            document.getElementById('total').textContent = `₹${total.toFixed(2)}`;
+            
+            // Display delivery information
+            if (orderData.deliveryDetails) {
+                const delivery = orderData.deliveryDetails;
+                document.getElementById('deliveryName').textContent = delivery.name;
+                document.getElementById('deliveryAddress').textContent = delivery.address;
+                document.getElementById('deliveryCityState').textContent = `${delivery.city}, ${delivery.state} - ${delivery.zip}`;
+                document.getElementById('deliveryContact').textContent = `${delivery.phone} • ${delivery.email}`;
+            }
+        });
+    </script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

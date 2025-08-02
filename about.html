@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us - FarmNaturals</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #4CAF50;
+      --primary-dark: #135016;
+      --light: #f8f9fa;
+      --dark: #212529;
+    }
+
+    body {
+      background-color: var(--light);
+      font-family: 'Poppins', sans-serif;
+      color: var(--dark);
+    }
+
+    .navbar-brand h1 {
+      font-weight: 700;
+      margin-bottom: 0;
+      font-size: 1.5rem;
+      color: var(--primary);
+    }
+
+    .navbar-brand p {
+      font-size: 0.75rem;
+      margin-bottom: 0;
+      color: var(--primary);
+    }
+
+    .navbar .nav-link,
+    .navbar .navbar-brand h1,
+    .navbar .navbar-brand p,
+    .navbar .dropdown-item {
+      color: var(--primary) !important;
+    }
+
+    .navbar .nav-link:hover,
+    .navbar .dropdown-item:hover {
+      color: var(--primary-dark) !important;
+    }
+
+    .hero-about {
+      background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+        url('images/f3.jpg') no-repeat center center/cover;
+      color: white;
+      padding: 120px 0;
+      text-align: center;
+    }
+
+    .section-title {
+      color: var(--primary-dark);
+      border-left: 5px solid var(--primary);
+      padding-left: 15px;
+      margin-bottom: 30px;
+      font-weight: bold;
+    }
+
+    .btn-farm {
+      background-color: var(--primary);
+      color: white;
+      padding: 10px 25px;
+      border-radius: 25px;
+      border: none;
+      transition: 0.3s ease;
+    }
+
+    .btn-farm:hover {
+      background-color: var(--primary-dark);
+    }
+
+    .footer {
+      background-color: var(--primary-dark);
+      color: white;
+      padding: 60px 0 0;
+    }
+
+    .footer a {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .footer a:hover {
+      color: white !important;
+      text-decoration: underline;
+    }
+
+    .social-icons a:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+      transform: scale(1.1);
+      transition: all 0.3s ease;
+    }
+
+    .social-icons a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="index.html">
+        <div class="me-2 d-flex align-items-center justify-content-center rounded-circle"
+          style="width: 40px; height: 40px; background-color: var(--primary);">
+          <i class="fas fa-leaf text-white"></i>
+        </div>
+        <div>
+          <h1 class="mb-0">FarmNaturals</h1>
+          <p class="mb-0">Direct from Farmers</p>
+        </div>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="productsDropdown" role="button"
+              data-bs-toggle="dropdown">Products</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="veg.html">Vegetables</a></li>
+              <li><a class="dropdown-item" href="Fruits.html">Fruits</a></li>
+              <li><a class="dropdown-item" href="Dairy.html">Dairy</a></li>
+              <li><a class="dropdown-item" href="Grains.html">Grains</a></li>
+              <li><a class="dropdown-item" href="Organic.html">Organic</a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+        </ul>
+        <div class="d-flex ms-lg-3">
+          <a href="login.html" class="btn btn-link position-relative me-2" title="Login">
+            <i class="fas fa-user-circle fa-lg" style="color: var(--primary);"></i>
+          </a>
+
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Banner -->
+  <section class="hero-about">
+    <div class="container">
+      <h1 class="display-4 fw-bold">About FarmNaturals</h1>
+      <p class="lead">From nature to your table – chemical-free, farm-fresh goodness</p>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="py-5">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-6 mb-4">
+          <img src="images/f4.jpg" alt="Farmers working" class="img-fluid rounded shadow" width="100%">
+        </div>
+        <div class="col-md-6">
+          <h2 class="section-title">Who We Are</h2>
+          <p>FarmNaturals is a digital bridge between hardworking local farmers and conscious consumers like you. We
+            deliver organic, chemical-free food straight from fields to your home.</p>
+          <p>Our vision is to promote sustainable agriculture, healthy living, and fair pricing for those who grow what
+            we eat.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mission Section -->
+  <section class="py-5 bg-light">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-6 order-md-2 mb-4">
+          <img src="images/f5.jpg" alt="Organic vegetables" class="img-fluid rounded shadow" width="100%">
+        </div>
+        <div class="col-md-6">
+          <h2 class="section-title">Our Mission</h2>
+          <p>We’re on a mission to empower farmers and inspire healthy eating. By shortening the supply chain and
+            eliminating middlemen, we support better livelihoods and fresher produce.</p>
+          <ul class="list-unstyled">
+            <li>✅ Fair Trade Practices</li>
+            <li>✅ Zero Harmful Chemicals</li>
+            <li>✅ Seasonal & Regional Specialties</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Choose Us Section -->
+  <section class="py-5">
+    <div class="container">
+      <h2 class="section-title text-center mb-5">Why Choose FarmNaturals?</h2>
+      <div class="row text-center g-4">
+        <div class="col-md-4">
+          <i class="fas fa-leaf fa-2x text-success mb-3"></i>
+          <h5>100% Organic</h5>
+          <p>Our products are free from pesticides, GMOs, and synthetic chemicals.</p>
+        </div>
+        <div class="col-md-4">
+          <i class="fas fa-hand-holding-usd fa-2x text-success mb-3"></i>
+          <h5>Fair to Farmers</h5>
+          <p>We ensure growers get a fair price for their efforts—directly.</p>
+        </div>
+        <div class="col-md-4">
+          <i class="fas fa-truck fa-2x text-success mb-3"></i>
+          <h5>Quick Delivery</h5>
+          <p>We pack and deliver your orders fresh and fast, maintaining quality.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-3">
+          <h3 class="text-white mb-4">FarmNaturals</h3>
+          <p class="mb-4">Connecting farmers directly with consumers for fresher produce and better prices.</p>
+          <div class="social-icons">
+            <a href="https://facebook.com/farmnaturals" class="text-white" aria-label="Facebook">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="https://twitter.com/farmnaturals" class="text-white" aria-label="Twitter">
+              <i class="fab fa-twitter"></i>
+            </a>
+            <a href="https://instagram.com/farmnaturals" class="text-white" aria-label="Instagram">
+              <i class="fab fa-instagram"></i>
+            </a>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <h4 class="text-white mb-4">Quick Links</h4>
+          <ul class="list-unstyled">
+            <li class="mb-2"><a href="index.html">Home</a></li>
+            <li class="mb-2"><a href="products.html">Products</a></li>
+            <li class="mb-2"><a href="about.html">About Us</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <h4 class="text-white mb-4">FAQ</h4>
+          <ul class="list-unstyled">
+            <li class="mb-2"><a href="faq.html#shipping">Shipping Information</a></li>
+            <li class="mb-2"><a href="faq.html#returns">Returns & Refunds</a></li>
+            <li class="mb-2"><a href="faq.html#payments">Payment Methods</a></li>
+            <li class="mb-2"><a href="faq.html#quality">Product Quality</a></li>
+            <li class="mb-2"><a href="contact.html">Contact Support</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <h4 class="text-white mb-4">Contact Us</h4>
+          <p class="mb-2">
+            <i class="fas fa-envelope me-2"></i>
+            <a href="mailto:info@farmnaturals.com" class="text-white">info@farmnaturals.com</a>
+          </p>
+          <p class="mb-2">
+            <i class="fas fa-phone me-2"></i>
+            <a href="tel:+919900990099" class="text-white">+91-9900990099</a>
+          </p>
+        </div>
+      </div>
+      <hr class="mt-4 mb-4" style="border-color: rgba(255,255,255,0.1);">
+      <div class="row">
+        <div class="col-md-6 text-center text-md-start">
+          <p class="mb-0">&copy; 2025 FarmNaturals. All rights reserved.</p>
+        </div>
+        <div class="col-md-6 text-center text-md-end">
+          <a href="privacy.html" class="me-3">Privacy Policy</a>
+          <a href="terms.html">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

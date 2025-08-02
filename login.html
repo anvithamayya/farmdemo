@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login/Signup - FarmNaturals</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+
+  <style>
+    :root {
+      --primary: #4CAF50;
+      --primary-dark: #135016;
+      --light: #f8f9fa;
+      --dark: #212529;
+    }
+
+    body {
+      background-color: #f5f5f5;
+    }
+
+    .auth-container {
+      min-height: 100vh;
+    }
+
+    .auth-card {
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .auth-image {
+      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url('images/f2.jpg');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      padding: 3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .auth-image h2 {
+      font-weight: 700;
+    }
+
+    .form-container {
+      position: relative;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .form-slider {
+      display: flex;
+      width: 200%;
+      transition: transform 0.5s ease-in-out;
+    }
+
+    .form-slide {
+      width: 50%;
+      padding: 3rem;
+      background: white;
+    }
+
+    .form-heading {
+      color: var(--primary);
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+      border-color: var(--primary-dark);
+    }
+
+    /* Password toggle styling */
+    .password-toggle-container {
+      position: relative;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #6c757d;
+      z-index: 10;
+    }
+
+    .password-field {
+      padding-right: 40px !important;
+    }
+
+    .social-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.1rem;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      color: #6c757d;
+      margin: 1.5rem 0;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      flex: 1;
+      border-bottom: 1px solid #dee2e6;
+    }
+
+    .divider::before {
+      margin-right: 1rem;
+    }
+
+    .divider::after {
+      margin-left: 1rem;
+    }
+
+    @media (max-width: 992px) {
+      .auth-image {
+        padding: 2rem;
+      }
+
+      .form-slide {
+        padding: 2rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .auth-image {
+        min-height: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container-fluid auth-container d-flex align-items-center justify-content-center">
+    <div class="row w-100">
+      <div class="col-lg-10 mx-auto">
+        <div class="card auth-card overflow-hidden">
+          <div class="row g-0">
+            <!-- Left Side - Image -->
+            <div class="col-lg-6 d-none d-lg-block">
+              <div class="auth-image h-100">
+                <h2 class="mb-3">Welcome to FarmNaturals</h2>
+              </div>
+            </div>
+
+            <!-- Right Side - Forms -->
+            <div class="col-lg-6">
+              <div class="form-container">
+                <div class="form-slider">
+                  <!-- Login Form -->
+                  <div class="form-slide">
+                    <h3 class="form-heading">Login</h3>
+                    <form>
+                      <div class="mb-3">
+                        <label for="loginEmail" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="loginEmail" required placeholder="your@email.com">
+                      </div>
+                      <div class="mb-3 password-toggle-container">
+                        <label for="loginPassword" class="form-label">Password</label>
+                        <input type="password" class="form-control password-field" id="loginPassword" placeholder="Enter your password" required><br>
+                        <i class="fas fa-eye password-toggle" id="toggleLoginPassword"></i>
+                      </div>
+                      <div class="d-flex justify-content-between mb-4">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="rememberMe">
+                          <label class="form-check-label" for="rememberMe">Remember me</label>
+                        </div>
+                        <a href="#" class="text-decoration-none">Forgot password?</a>
+                      </div>
+                      <button type="submit" class="btn btn-primary w-100 py-2 mb-3">Login</button>
+
+                      <div class="divider">or continue with</div>
+                      
+
+                      <p class="text-center">Don't have an account? <a href="#" class="text-decoration-none" id="switch-to-signup">Sign up</a></p>
+                    </form>
+                  </div>
+
+                  <!-- Signup Form -->
+                  <div class="form-slide">
+                    <h3 class="form-heading">Sign Up</h3>
+                    <form>
+                     
+                      <div class="mb-3">
+                        <label for="signupEmail" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="signupEmail" required>
+                      </div>
+                      <div class="mb-3 password-toggle-container">
+                        <label for="signupPassword" class="form-label">Password</label>
+                        <input type="password" class="form-control password-field" id="signupPassword" required>
+                        <i class="fas fa-eye password-toggle" id="toggleSignupPassword"></i>
+                        <div class="form-text">Minimum 8 characters</div>
+                      </div>
+                      <div class="mb-3 password-toggle-container">
+                        <label for="confirmPassword" class="form-label">Confirm Password</label>
+                        <input type="password" class="form-control password-field" id="confirmPassword" required><br>
+                        <i class="fas fa-eye password-toggle" id="toggleConfirmPassword"></i>
+                      </div>
+                      <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="termsCheck" required>
+                        <label class="form-check-label" for="termsCheck">I agree to the <a href="#" class="text-decoration-none">Terms of Service</a> and <a href="#" class="text-decoration-none">Privacy Policy</a></label>
+                      </div>
+                      
+                      <button type="submit" class="btn btn-primary w-100 py-2 mb-3">Create Account</button>
+
+                      <div class="divider">or sign up with</div>
+
+                      <p class="text-center">Already have an account? <a href="#" class="text-decoration-none" id="switch-to-login">Login</a></p>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div> <!-- end col-lg-6 -->
+          </div> <!-- end row -->
+        </div> <!-- end card -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+ <script>
+  // Utility: Toggle password visibility
+  function setupPasswordToggle(inputId, toggleId) {
+    const passwordInput = document.getElementById(inputId);
+    const toggle = document.getElementById(toggleId);
+    toggle.addEventListener('click', function () {
+      const type = passwordInput.type === 'password' ? 'text' : 'password';
+      passwordInput.type = type;
+      toggle.classList.toggle('fa-eye');
+      toggle.classList.toggle('fa-eye-slash');
+    });
+  }
+
+  // Initialize toggles
+  setupPasswordToggle('loginPassword', 'toggleLoginPassword');
+  setupPasswordToggle('signupPassword', 'toggleSignupPassword');
+  setupPasswordToggle('confirmPassword', 'toggleConfirmPassword');
+
+  // Switch forms
+  const formSlider = document.querySelector('.form-slider');
+  document.getElementById('switch-to-signup').addEventListener('click', (e) => {
+    e.preventDefault();
+    formSlider.style.transform = 'translateX(-50%)';
+  });
+  document.getElementById('switch-to-login').addEventListener('click', (e) => {
+    e.preventDefault();
+    formSlider.style.transform = 'translateX(0)';
+  });
+
+  // Handle login/signup with fetch()
+  document.querySelectorAll('form').forEach(form => {
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const heading = this.closest('.form-slide').querySelector('.form-heading').textContent.trim();
+
+      if (heading === 'Login') {
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+
+  const formData = new URLSearchParams();
+formData.append('username', email);  // FastAPI expects `username`
+formData.append('password', password);
+
+const response = await fetch('http://localhost:8000/token', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+  body: formData
+});
+
+
+ if (response.ok) {
+  const data = await response.json();
+  localStorage.setItem('token', data.access_token);
+  localStorage.setItem('is_admin', data.is_admin);
+
+  if (data.is_admin) {
+    window.location.href = 'admin.html';
+  } else {
+    window.location.href = 'index.html';
+  }
+}
+
+
+
+
+      } else if (heading === 'Sign Up') {
+        const email = document.getElementById('signupEmail').value.trim();
+        const password = document.getElementById('signupPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+
+        if (password !== confirmPassword) {
+          alert('Passwords do not match.');
+          return;
+        }
+
+        const response = await fetch('http://localhost:8000/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+
+        if (response.ok) {
+          alert('Signup successful. Please log in.');
+          formSlider.style.transform = 'translateX(0)';
+        } else {
+  const error = await response.json();
+  alert('Signup failed: ' + (error.detail || 'Unknown error'));
+}
+
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
