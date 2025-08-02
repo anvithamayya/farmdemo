@@ -1172,7 +1172,7 @@ if (addProductForm) {
                 const modal = bootstrap.Modal.getInstance(document.getElementById("addProductModal"));
                 modal.hide();
                 // Optionally reload products here
-                // loadProducts();
+                loadProducts();
             } else {
                 const err = await res.json();
                 alert("❌ Error: " + (err.detail || "Unknown error"));
@@ -1207,7 +1207,7 @@ async function loadProducts() {
         products.forEach(product => {
             tbody.innerHTML += `
                 <tr>
-                    <td><img src="${product.image_url || 'images/placeholder.png'}" class="product-img-thumb" alt="${product.name}"></td>
+                    <td><img src="${product.image_url || 'images/placeholder.jpg'}" class="product-img-thumb" alt="${product.name}"></td>
                     <td>${product.name}</td>
                     <td>${product.category}</td>
                     <td>₹${product.price}/${product.unit}</td>
