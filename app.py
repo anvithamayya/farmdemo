@@ -214,3 +214,16 @@ def delete_product(product_id: int, token: str = Depends(verify_admin)):
     return {"message": "Product deleted successfully"}
 # Mount the router
 app.include_router(admin_router)
+from fastapi import UploadFile, File
+import shutil
+import os
+
+UPLOAD_DIR = "images"
+os.makedirs(UPLOAD_DIR, exist_ok=True)
+
+@app.post("/upload-image")
+async def upload_image(file: UploadFile = File(...)):
+    file_path = os.path.join(UPLOAD_DIR, file.filename)
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+    return {"url": f"/images/{file.filename}"}
