@@ -295,7 +295,7 @@ const response = await fetch('http://localhost:8000/token', {
 
  if (response.ok) {
   const data = await response.json();
-  localStorage.setItem('token', data.access_token);
+  localStorage.setItem('adminToken', data.access_token); // <-- THIS IS THE KEY YOUR ADMIN DASHBOARD USES
   localStorage.setItem('is_admin', data.is_admin);
 
   if (data.is_admin) {
