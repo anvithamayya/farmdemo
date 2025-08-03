@@ -512,148 +512,153 @@
             return new bootstrap.Tooltip(tooltipTriggerEl)
         });
 
+document.addEventListener('DOMContentLoaded', function() {
+        const API_BASE = "http://localhost:8000";
+        const container = document.getElementById("products-container");
+        const userEmail = localStorage.getItem("user_email");
+        const cartKey = userEmail ? `farmNaturalsCart_${userEmail}` : null;
 
-        // Cart functionality using localStorage
-        document.addEventListener('DOMContentLoaded', function () {
-            // Initialize tooltips
-            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-                return new bootstrap.Tooltip(tooltipTriggerEl)
-            });
+        // Get cart elements
+        const cartList = document.getElementById('cart-items');
+        const cartTotal = document.getElementById('cart-total');
+        const cartCount = document.getElementById('cart-count');
 
-            // Get cart elements
-            const cartList = document.getElementById('cart-items');
-            const cartTotal = document.getElementById('cart-total');
-            const cartCount = document.getElementById('cart-count');
+        // Get cart from localStorage or initialize empty array
+        function getCart() {
+            const cart = localStorage.getItem(cartKey);
+            return cart ? JSON.parse(cart) : [];
+        }
 
-            // Get cart from localStorage or initialize empty array
-            function getCart() {
-                const cart = localStorage.getItem('farmNaturalsCart');
-                return cart ? JSON.parse(cart) : [];
-            }
+        // Save cart to localStorage
+        function saveCart(cart) {
+            localStorage.setItem(cartKey, JSON.stringify(cart));
+        }
 
-            // Save cart to localStorage
-            function saveCart(cart) {
-                localStorage.setItem('farmNaturalsCart', JSON.stringify(cart));
-            }
+        // Add to cart handler
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', async function() {
+                const name = this.getAttribute('data-name');
+                const price = parseFloat(this.getAttribute('data-price'));
+                
+                if (!userEmail || !cartKey) {
+                    showToast("Please login to add items to cart.");
+                    return;
+                }
 
-            // Add to cart handler
-            document.querySelectorAll('.add-to-cart').forEach(button => {
-                button.addEventListener('click', function () {
-                    const name = this.getAttribute('data-name');
-                    const price = parseFloat(this.getAttribute('data-price'));
-
-                    const cart = getCart();
-                    const existingItem = cart.find(item => item.name === name);
-
-                    if (existingItem) {
-                        existingItem.quantity += 1;
-                    } else {
-                        cart.push({ name, price, quantity: 1 });
-                    }
-
-                    saveCart(cart);
-                    updateCartUI();
-
-                    // Show toast notification
-                    showToast(`${name} added to cart`);
-                });
-            });
-
-            // Update Cart UI
-
-            function updateCartUI() {
                 const cart = getCart();
+                const existingItem = cart.find(item => item.name === name);
+                
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    cart.push({ name, price, quantity: 1 });
+                }
+                
+                saveCart(cart);
+                updateCartUI();
+                
+                try {
+                    const res = await fetch(`${API_BASE}/cart/add?email=${encodeURIComponent(userEmail)}`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ email: userEmail, product_name: name, quantity: 1 })
+                    });
+                    const data = await res.json();
+                    if (!res.ok) showToast(data.detail || "Error adding to cart");
+                    else showToast(`${name} added to cart`);
+                } catch (err) {
+                    showToast("Server error");
+                    console.error(err);
+                }
+            });
+        });
 
-                if (cartList) {
-                    cartList.innerHTML = '';
-                    let total = 0;
-                    let count = 0;
+        // Update Cart UI
+        function updateCartUI() {
+            const cart = getCart();
+            
+            if (cartList) {
+                cartList.innerHTML = '';
+                let total = 0;
+                let count = 0;
 
-                    cart.forEach((item, index) => {
-                        const itemTotal = item.price * item.quantity;
-                        total += itemTotal;
-                        count += item.quantity;
+                cart.forEach((item, index) => {
+                    const itemTotal = item.price * item.quantity;
+                    total += itemTotal;
+                    count += item.quantity;
 
-                        const li = document.createElement('li');
-                        li.className = 'list-group-item d-flex justify-content-between align-items-center';
-                        li.innerHTML = `
-                <div>
-                    <strong>${item.name}</strong><br>
-                    <small>₹${item.price.toFixed(2)} x ${item.quantity}</small>
-                </div>
-                <div>
-                    <span class="text-success fw-bold">₹${itemTotal.toFixed(2)}</span>
-                    <button class="btn btn-sm btn-danger ms-2 remove-item" data-index="${index}">&times;</button>
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item d-flex justify-content-between align-items-center';
+                    li.innerHTML = `
+                        <div>
+                            <strong>${item.name}</strong><br>
+                            <small>₹${item.price.toFixed(2)} x ${item.quantity}</small>
+                        </div>
+                        <div>
+                            <span class="text-success fw-bold">₹${itemTotal.toFixed(2)}</span>
+                            <button class="btn btn-sm btn-danger ms-2 remove-item" data-index="${index}">&times;</button>
+                        </div>
+                    `;
+                    cartList.appendChild(li);
+                });
+
+                // Re-bind remove buttons
+                document.querySelectorAll('.remove-item').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const index = parseInt(this.getAttribute('data-index'));
+                        const cart = getCart();
+                        cart.splice(index, 1);
+                        saveCart(cart);
+                        updateCartUI();
+                    });
+                });
+
+                if (cartTotal) cartTotal.textContent = `₹${total.toFixed(2)}`;
+            }
+            
+            if (cartCount) cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+            
+            // Store cart in sessionStorage for checkout page access
+            sessionStorage.setItem('checkoutCart', JSON.stringify(cart));
+        }
+
+        // Update the checkout button click handler
+        document.querySelector('a[href="checkout.html"]').addEventListener('click', function(e) {
+            const cart = getCart();
+            if (cart.length === 0) {
+                e.preventDefault();
+                showToast('Your cart is empty!');
+            } else {
+                // Cart data is already saved to sessionStorage in updateCartUI
+            }
+        });
+
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'position-fixed bottom-0 end-0 p-3';
+            toast.style.zIndex = '11';
+            toast.innerHTML = `
+                <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header bg-success text-white">
+                        <strong class="me-auto">FarmNaturals</strong>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        ${message}
+                    </div>
                 </div>
             `;
-                        cartList.appendChild(li);
-                    });
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
 
-                    // Re-bind remove buttons
-                    document.querySelectorAll('.remove-item').forEach(btn => {
-                        btn.addEventListener('click', function () {
-                            const index = parseInt(this.getAttribute('data-index'));
-                            const cart = getCart();
-                            cart.splice(index, 1);
-                            saveCart(cart);
-                            updateCartUI();
-                        });
-                    });
-
-                    if (cartTotal) cartTotal.textContent = `₹${total.toFixed(2)}`;
-                }
-
-                if (cartCount) cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
-
-                // Store cart in sessionStorage for checkout page access
-                sessionStorage.setItem('checkoutCart', JSON.stringify(cart));
-            }
-
-            // Update the checkout button click handler
-            document.querySelector('a[href="checkout.html"]').addEventListener('click', function (e) {
-                const cart = getCart();
-                if (cart.length === 0) {
-                    e.preventDefault();
-                    showToast('Your cart is empty!');
-                } else {
-                    // Cart data is already saved to sessionStorage in updateCartUI
-                }
-            });
-            // Add this after your existing code inside the script tag
-            function showToast(message) {
-                // Create toast element
-                const toast = document.createElement('div');
-                toast.className = 'position-fixed bottom-0 end-0 p-3';
-                toast.style.zIndex = '11';
-                toast.innerHTML = `
-        <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header bg-success text-white">
-                <strong class="me-auto">FarmNaturals</strong>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            <div class="toast-body">
-                ${message}
-            </div>
-        </div>
-    `;
-
-                // Add to DOM
-                document.body.appendChild(toast);
-
-                // Remove after 3 seconds
-                setTimeout(() => {
-                    toast.remove();
-                }, 3000);
-            }
-
-            // Initialize cart UI when page loads
-            updateCartUI();
-
-            // Close the DOMContentLoaded event listener
-        }); // This was missing
-
-
+        // Initialize cart UI when page loads
+        updateCartUI();
+    });
     </script>
 </body>
 
