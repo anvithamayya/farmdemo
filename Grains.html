@@ -1,467 +1,297 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FarmNaturals - Fresh Grains</title>
-    <!-- Font Awesome (single link) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #4CAF50;
-            --primary-dark: #135016;
-            --light: #f8f9fa;
-            --dark: #212529;
-        }
-          * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            font-family: 'Poppins', sans-serif;
-            color: var(--primary);
-        }
-         .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .navbar-brand h1 {
-            font-weight: 700;
-            margin-bottom: 0;
-            font-size: 1.5rem;
-            color: var(--primary);
-        }
-        
-        .navbar-brand p {
-            font-size: 0.75rem;
-            margin-bottom: 0;
-            color: var(--primary);
-        }
-        .navbar .nav-link,
-        .navbar .navbar-brand h1,
-        .navbar .navbar-brand p,
-        .navbar .dropdown-item {
-            color: var(--primary) !important;
-        }
-        .navbar .nav-link:hover,
-        .navbar .dropdown-item:hover {
-            color: var(--primary-dark) !important;
-        }
-        
-        .grains-hero {
-            background-color:var(--primary-dark);
-            background-size: cover;
-            background-position: center;
-            color: white;
-            text-align: center;
-            padding: 80px 0;
-            margin-bottom: 40px;
-        }
-        
-        .grains-hero h1 {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-        }
-        
-        /* Products */
-        .products-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-        
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 40px;
-            margin-bottom: 50px;
-        }
-        
-        .product-card {
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
-        }
-        
-        .product-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .product-image {
-            height: 180px;
-            overflow: hidden;
-        }
-        
-        .product-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s;
-        }
-        
-        .product-card:hover .product-image img {
-            transform: scale(1.05);
-        }
-        
-        .product-info {
-            padding: 15px;
-        }
-        
-        .product-title {
-            font-size: 1.1rem;
-            margin-bottom: 5px;
-        }
-        
-        .product-price {
-            font-weight: bold;
-            color: var(--primary);
-            margin: 10px 0;
-        }
-        
-        .add-to-cart {
-            width: 100%;
-            padding: 8px;
-            background: var(--primary-dark);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        
-        .add-to-cart:hover {
-            background: var(--primary);
-        }
-        
-        /* Footer */
-        footer {
-            background: var(--primary-dark);
-            color: white;
-            padding: 30px 0;
-            text-align: center;
-        }
-        
-        @media (max-width: 768px) {
-            .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            }
-            
-            .products-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FarmNaturals - Fresh Grains</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --primary: #4CAF50;
+      --primary-dark: #135016;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      color: var(--primary);
+    }
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .grains-hero {
+      background-color: var(--primary-dark);
+      color: white;
+      text-align: center;
+      padding: 80px 0;
+      margin-bottom: 40px;
+    }
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 30px;
+      margin-bottom: 60px;
+    }
+    .product-card {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+    .product-card:hover {
+      transform: translateY(-5px);
+    }
+    .product-image {
+      height: 180px;
+      overflow: hidden;
+    }
+    .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .product-info {
+      padding: 15px;
+    }
+    .product-title {
+      font-size: 1.1rem;
+      margin-bottom: 5px;
+    }
+    .product-price {
+      font-weight: bold;
+      color: var(--primary);
+      margin: 10px 0;
+    }
+    .add-to-cart {
+      width: 100%;
+      padding: 8px;
+      background: var(--primary-dark);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .add-to-cart:hover {
+      background: var(--primary);
+    }
+    footer {
+      background: var(--primary-dark);
+      color: white;
+      padding: 30px 0;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
-        <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="index.html">
-                <div class="me-2 d-flex align-items-center justify-content-center rounded-circle" style="width: 40px; height: 40px; background-color: var(--primary);">
-                    <i class="fas fa-leaf text-white"></i>
-                </div>
-                <div>
-                    <h1 class="mb-0" style="font-size: 1.5rem;">FarmNaturals</h1>
-                    <p class="mb-0" style="font-size: 0.75rem;">Direct from Farmers</p>
-                </div>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html">Home</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="productsDropdown" role="button" data-bs-toggle="dropdown">
-                            Products
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="veg.html">Vegetables</a></li>
-                            <li><a class="dropdown-item" href="fruits.html">Fruits</a></li>
-                            <li><a class="dropdown-item" href="dairy.html">Dairy</a></li>
-                            <li><a class="dropdown-item active" href="grains.html">Grains</a></li>
-                            <li><a class="dropdown-item" href="Organic.html">Organic</a></li>
-                        </ul>
-                    </li>
-                   
-                    <li class="nav-item">
-                        <a class="nav-link" href="about.html">About</a>
-                    </li>
-                </ul>
-                <div class="d-flex ms-lg-3">
-                    <a href="login.html" class="btn btn-link position-relative me-2" title="Login">
-                        <i class="fas fa-user-circle fa-lg" style="color: var(--primary);"></i>
-                    </a>
-                    <a href="#" class="btn btn-link position-relative ms-2" data-bs-toggle="offcanvas" data-bs-target="#cartSidebar" aria-controls="cartSidebar">
-                        <i class="fas fa-shopping-cart" style="color: var(--primary); font-size: 1.5rem;"></i>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success" id="cart-count">0</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </nav>
 
-    <!-- Hero Section -->
-    <section class="grains-hero">
-        <div class="container">
-            <h1>Premium Quality Grains</h1>
-            <p>FarmNaturals grains - wholesome nutrition from our fields to your table</p>
-        </div>
-    </section>
-
-    <!-- Products Grid -->
-    <div class="container">
-        <div class="products-grid">
-            <!-- Product 1 -->
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="images/basmati-rice.jpg" alt="Basmati Rice">
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">Premium Basmati Rice</h3>
-                    <p class="product-price">₹120/kg</p>
-                    <button class="add-to-cart" data-name="Premium Basmati Rice" data-price="120">Add to Cart</button>
-                </div>
-            </div>
-
-            <!-- Product 2 -->
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="images/wheat.jpg" alt="Whole Wheat">
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">Whole Wheat Flour</h3>
-                    <p class="product-price">₹45/kg</p>
-                    <button class="add-to-cart" data-name="Whole Wheat Flour" data-price="45">Add to Cart</button>
-                </div>
-            </div>
-
-            <!-- Product 3 -->
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="images/quinoa.jpg" alt="Organic Quinoa">
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">Organic Quinoa</h3>
-                    <p class="product-price">₹350/500g</p>
-                    <button class="add-to-cart" data-name="Organic Quinoa" data-price="350">Add to Cart</button>
-                </div>
-            </div>
-
-            <!-- Product 4 -->
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="images/millet.jpg" alt="Foxtail Millet">
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">Foxtail Millet</h3>
-                    <p class="product-price">₹90/kg</p>
-                    <button class="add-to-cart" data-name="Foxtail Millet" data-price="90">Add to Cart</button>
-                </div>
-            </div>
-
-            <!-- Product 5 -->
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="images/oats.jpg" alt="Rolled Oats">
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">Rolled Oats</h3>
-                    <p class="product-price">₹80/500g</p>
-                    <button class="add-to-cart" data-name="Rolled Oats" data-price="80">Add to Cart</button>
-                </div>
-            </div>
-
-            <!-- Product 6 -->
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="images/red-rice.jpg" alt="Red Rice">
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">Organic Red Rice</h3>
-                    <p class="product-price">₹150/kg</p>
-                    <button class="add-to-cart" data-name="Organic Red Rice" data-price="150">Add to Cart</button>
-                </div>
-            </div>
-        </div>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center" href="index.html">
+      <div class="me-2 d-flex align-items-center justify-content-center rounded-circle" style="width: 40px; height: 40px; background-color: var(--primary);">
+        <i class="fas fa-leaf text-white"></i>
+      </div>
+      <div>
+        <h1 class="mb-0" style="font-size: 1.5rem;">FarmNaturals</h1>
+        <p class="mb-0" style="font-size: 0.75rem;">Direct from Farmers</p>
+      </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Products</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="veg.html">Vegetables</a></li>
+            <li><a class="dropdown-item" href="fruits.html">Fruits</a></li>
+            <li><a class="dropdown-item" href="dairy.html">Dairy</a></li>
+            <li><a class="dropdown-item active" href="grains.html">Grains</a></li>
+            <li><a class="dropdown-item" href="Organic.html">Organic</a></li>
+          </ul>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+      </ul>
+      <div class="d-flex ms-lg-3 position-relative">
+        <a href="login.html" class="btn btn-link me-2" title="Login">
+          <i class="fas fa-user-circle fa-lg" style="color: var(--primary);"></i>
+        </a>
+        <a href="#" class="btn btn-link position-relative" data-bs-toggle="offcanvas" data-bs-target="#cartSidebar">
+          <i class="fas fa-shopping-cart" style="color: var(--primary); font-size: 1.5rem;"></i>
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success" id="cart-count">0</span>
+        </a>
+      </div>
     </div>
-    
-    <!-- Footer -->
-     <footer>
-        <div class="container">
-            <p>&copy; 2025 FarmNaturals. All rights reserved.</p>
-        </div>
-    </footer>
+  </div>
+</nav>
 
-    <!-- Offcanvas Cart -->
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="cartSidebar" aria-labelledby="cartSidebarLabel">
+<!-- Hero Section -->
+<section class="grains-hero">
+  <div class="container">
+    <h1>Premium Quality Grains</h1>
+    <p>FarmNaturals grains - wholesome nutrition from our fields to your table</p>
+  </div>
+</section>
+
+<!-- Products Grid -->
+<div class="container">
+  <div class="products-grid" id="products-container">
+    <!-- Products will be loaded here dynamically -->
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <p>&copy; 2025 FarmNaturals. All rights reserved.</p>
+  </div>
+</footer>
+
+<!-- Cart Sidebar -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="cartSidebar">
   <div class="offcanvas-header">
-    <h5 id="cartSidebarLabel">Your Cart</h5>
-    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    <h5>Your Cart</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
   </div>
   <div class="offcanvas-body">
     <ul class="list-group mb-3" id="cart-items"></ul>
-    <h5>Total: <span id="cart-total">0.00</span></h5>
+    <h5>Total: <span id="cart-total">₹0.00</span></h5>
     <a href="checkout.html" class="btn btn-success w-100 mt-3">Proceed to Checkout</a>
   </div>
 </div>
 
-    <!-- Bootstrap JS Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Cart functionality using localStorage
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize tooltips
-            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-                return new bootstrap.Tooltip(tooltipTriggerEl)
-            });
-            
-            // Get cart elements
-            const cartList = document.getElementById('cart-items');
-            const cartTotal = document.getElementById('cart-total');
-            const cartCount = document.getElementById('cart-count');
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-            // Get cart from localStorage or initialize empty array
-            function getCart() {
-                const cart = localStorage.getItem('farmNaturalsCart');
-                return cart ? JSON.parse(cart) : [];
-            }
+<!-- JS for products and cart -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const API_BASE = "http://localhost:8000";
+  const container = document.getElementById("products-container");
 
-            // Save cart to localStorage
-            function saveCart(cart) {
-                localStorage.setItem('farmNaturalsCart', JSON.stringify(cart));
-            }
+  const userEmail = localStorage.getItem("user_email");
+  const cartKey = userEmail ? `farmNaturalsCart_${userEmail}` : null;
 
-            // Add to cart handler
-            document.querySelectorAll('.add-to-cart').forEach(button => {
-                button.addEventListener('click', function() {
-                    const name = this.getAttribute('data-name');
-                    const price = parseFloat(this.getAttribute('data-price'));
-                    
-                    const cart = getCart();
-                    const existingItem = cart.find(item => item.name === name);
-                    
-                    if (existingItem) {
-                        existingItem.quantity += 1;
-                    } else {
-                        cart.push({ name, price, quantity: 1 });
-                    }
-                    
-                    saveCart(cart);
-                    updateCartUI();
-                    
-                    // Show toast notification
-                    showToast(`${name} added to cart`);
-                });
-            });
+  fetch(`${API_BASE}/products/public?category=Grains`)
+    .then(res => res.json())
+    .then(products => {
+      products.forEach(product => {
+        const card = document.createElement("div");
+        card.className = "product-card";
+        card.innerHTML = `
+          <div class="product-image">
+            <img src="${product.image_url || 'images/placeholder.jpg'}" alt="${product.name}">
+          </div>
+          <div class="product-info">
+            <h3 class="product-title">${product.name}</h3>
+            <p class="product-price">₹${product.price}/${product.unit}</p>
+            <button class="add-to-cart" data-name="${product.name}" data-price="${product.price}">Add to Cart</button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+      attachAddToCartListeners();
+    })
+    .catch(err => {
+      container.innerHTML = "<p>⚠️ Failed to load products.</p>";
+      console.error(err);
+    });
 
-            // Update Cart UI
-            function updateCartUI() {
-    const cart = getCart();
-    
-    if (cartList) {
-        cartList.innerHTML = '';
-        let total = 0;
-        let count = 0;
+  function attachAddToCartListeners() {
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+      button.addEventListener('click', async function () {
+        const name = this.getAttribute('data-name');
+        const price = parseFloat(this.getAttribute('data-price'));
 
-        cart.forEach((item, index) => {
-            const itemTotal = item.price * item.quantity;
-            total += itemTotal;
-            count += item.quantity;
+        if (!userEmail || !cartKey) {
+          showToast("Please login to add items to cart.");
+          return;
+        }
 
-            const li = document.createElement('li');
-            li.className = 'list-group-item d-flex justify-content-between align-items-center';
-            li.innerHTML = `
-                <div>
-                    <strong>${item.name}</strong><br>
-                    <small>₹${item.price.toFixed(2)} x ${item.quantity}</small>
-                </div>
-                <div>
-                    <span class="text-success fw-bold">₹${itemTotal.toFixed(2)}</span>
-                    <button class="btn btn-sm btn-danger ms-2 remove-item" data-index="${index}">&times;</button>
-                </div>
-            `;
-            cartList.appendChild(li);
-        });
+        const cart = JSON.parse(localStorage.getItem(cartKey) || "[]");
+        const existing = cart.find(item => item.name === name);
+        if (existing) {
+          existing.quantity += 1;
+        } else {
+          cart.push({ name, price, quantity: 1 });
+        }
+        localStorage.setItem(cartKey, JSON.stringify(cart));
+        updateCartUI();
 
-        // Re-bind remove buttons
-        document.querySelectorAll('.remove-item').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const index = parseInt(this.getAttribute('data-index'));
-                const cart = getCart();
-                cart.splice(index, 1);
-                saveCart(cart);
-                updateCartUI();
-            });
-        });
+        try {
+          const res = await fetch(`${API_BASE}/cart/add?email=${encodeURIComponent(userEmail)}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: userEmail, product_name: name, quantity: 1 })
+          });
+          const data = await res.json();
+          if (!res.ok) showToast(data.detail || "Error adding to cart");
+          else showToast(`${name} added to cart`);
+        } catch (err) {
+          showToast("Server error");
+          console.error(err);
+        }
+      });
+    });
+  }
 
-        if (cartTotal) cartTotal.textContent = `₹${total.toFixed(2)}`;
+  function updateCartUI() {
+    if (!cartKey) return;
+    const cart = JSON.parse(localStorage.getItem(cartKey) || "[]");
+    document.getElementById("cart-count").textContent = cart.length;
+    const cartList = document.getElementById("cart-items");
+    const cartTotal = document.getElementById("cart-total");
+    if (cartList && cartTotal) {
+      cartList.innerHTML = "";
+      let total = 0;
+      cart.forEach((item, index) => {
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
+        const li = document.createElement("li");
+        li.className = "list-group-item d-flex justify-content-between align-items-center";
+        li.innerHTML = `
+          <div>
+            <strong>${item.name}</strong><br>
+            <small>₹${item.price.toFixed(2)} x ${item.quantity}</small>
+          </div>
+          <div>
+            <span class="text-success fw-bold">₹${itemTotal.toFixed(2)}</span>
+            <button class="btn btn-sm btn-danger ms-2 remove-item" data-index="${index}">&times;</button>
+          </div>
+        `;
+        cartList.appendChild(li);
+      });
+      cartTotal.textContent = `₹${total.toFixed(2)}`;
     }
-    
-    if (cartCount) cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
-    
-    // Store cart in sessionStorage for checkout page access
-    sessionStorage.setItem('checkoutCart', JSON.stringify(cart));
-}
+  }
 
-// Update the checkout button click handler
-document.querySelector('a[href="checkout.html"]').addEventListener('click', function(e) {
-    const cart = getCart();
-    if (cart.length === 0) {
-        e.preventDefault();
-        showToast('Your cart is empty!');
-    } else {
-        // Cart data is already saved to sessionStorage in updateCartUI
-    }
-});
-// Add this after your existing code inside the script tag
-function showToast(message) {
-    // Create toast element
-    const toast = document.createElement('div');
-    toast.className = 'position-fixed bottom-0 end-0 p-3';
-    toast.style.zIndex = '11';
+  function showToast(message) {
+    const toast = document.createElement("div");
+    toast.className = "toast show position-fixed bottom-0 end-0 m-3 bg-success text-white";
     toast.innerHTML = `
-        <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header bg-success text-white">
-                <strong class="me-auto">FarmNaturals</strong>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            <div class="toast-body">
-                ${message}
-            </div>
-        </div>
+      <div class="toast-header bg-success text-white">
+        <strong class="me-auto">FarmNaturals</strong>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+      </div>
+      <div class="toast-body">${message}</div>
     `;
-    
-    // Add to DOM
     document.body.appendChild(toast);
-    
-    // Remove after 3 seconds
-    setTimeout(() => {
-        toast.remove();
-    }, 3000);
-}
+    setTimeout(() => toast.remove(), 3000);
+  }
 
-// Initialize cart UI when page loads
-updateCartUI();
+  updateCartUI();
+});
+</script>
 
-// Close the DOMContentLoaded event listener
-}); // This was missing
-
-    </script>
 </body>
 </html>
