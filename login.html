@@ -286,7 +286,7 @@
 formData.append('username', email);  // FastAPI expects `username`
 formData.append('password', password);
 
-const response = await fetch('http://localhost:8000/token', {
+const response = await fetch('http://127.0.0.1:8000/token', {
   method: 'POST',
   headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
   body: formData
@@ -297,7 +297,7 @@ const response = await fetch('http://localhost:8000/token', {
   const data = await response.json();
   localStorage.setItem('adminToken', data.access_token); // <-- THIS IS THE KEY YOUR ADMIN DASHBOARD USES
   localStorage.setItem('is_admin', data.is_admin);
-
+  localStorage.setItem('user_email',email)
   if (data.is_admin) {
     window.location.href = 'admin.html';
   } else {
@@ -317,7 +317,7 @@ const response = await fetch('http://localhost:8000/token', {
           alert('Passwords do not match.');
           return;
         }
-
+       console.log("Signup form submitted with email:", email);  
         const response = await fetch('http://localhost:8000/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
