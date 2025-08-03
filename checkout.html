@@ -391,8 +391,12 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      // Load cart items from localStorage (not sessionStorage)
-      const cart = JSON.parse(localStorage.getItem('farmNaturalsCart')) || [];
+      const API_BASE = "http://localhost:8000";
+      const userEmail = localStorage.getItem("user_email");
+      const cartKey = userEmail ? `farmNaturalsCart_${userEmail}` : null;
+
+      // Load cart items from localStorage
+      const cart = JSON.parse(localStorage.getItem(cartKey)) || [];
       const orderItems = document.getElementById('orderItems');
       const subtotalEl = document.getElementById('subtotal');
       const deliveryEl = document.getElementById('delivery');
@@ -480,7 +484,7 @@
           }),
           deliveryDate: calculateDeliveryDate()
         };
-        localStorage.setItem('orderData', JSON.stringify(orderData)); // Store in localStorage
+        localStorage.setItem('orderData', JSON.stringify(orderData));
       }
 
       // Calculate delivery date (3 days from now)
@@ -496,7 +500,12 @@
       }
 
       // Place order button
-      document.getElementById('placeOrderBtn').addEventListener('click', function () {
+      document.getElementById('placeOrderBtn').addEventListener('click', async function () {
+        if (!userEmail) {
+          showToast('Please login to place an order');
+          return;
+        }
+
         // Validate form
         const form = document.getElementById('deliveryForm');
         if (!form.checkValidity()) {
@@ -507,12 +516,10 @@
         // Validate payment method if not COD
         const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').id;
         if (paymentMethod === 'creditCard') {
-          const ccForm = document.getElementById('creditCardForm');
           if (!validateCreditCardForm()) {
             return;
           }
         } else if (paymentMethod === 'paytm') {
-          const upiForm = document.getElementById('upiForm');
           if (!validateUPIForm()) {
             return;
           }
@@ -530,17 +537,43 @@
           paymentMethod: paymentMethod
         };
 
-        // Update order data with delivery details
+        // Get order data
         const orderData = JSON.parse(localStorage.getItem('orderData'));
         orderData.deliveryDetails = deliveryDetails;
         orderData.paymentMethod = paymentMethod;
-        localStorage.setItem('orderData', JSON.stringify(orderData));
+        
+        try {
+          // Submit order to server
+          const response = await fetch(`${API_BASE}/orders/create?email=${encodeURIComponent(userEmail)}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              email: userEmail,
+              orderData: orderData,
+              cart: cart
+            })
+          });
 
-        // Clear cart (optional: you might want to keep it until order is confirmed by server)
-        localStorage.removeItem('farmNaturalsCart');
+          const data = await response.json();
+          
+          if (!response.ok) {
+            showToast(data.detail || "Error placing order");
+            return;
+          }
 
-        // Redirect to confirmation page
-        window.location.href = 'confirmation.html';
+          // Clear cart on successful order
+          localStorage.removeItem(cartKey);
+          localStorage.setItem('orderData', JSON.stringify(orderData));
+          
+          // Redirect to confirmation page
+          window.location.href = 'confirmation.html';
+          
+        } catch (error) {
+          showToast("Error connecting to server");
+          console.error(error);
+        }
       });
 
       function validateCreditCardForm() {
@@ -569,8 +602,25 @@
         upiId.classList.remove('is-invalid');
         return true;
       }
+
+      function showToast(message) {
+        const toast = document.createElement('div');
+        toast.className = 'position-fixed bottom-0 end-0 p-3';
+        toast.style.zIndex = '11';
+        toast.innerHTML = `
+          <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header bg-success text-white">
+              <strong class="me-auto">FarmNaturals</strong>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">${message}</div>
+          </div>
+        `;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+      }
     });
-  </script>
+</script>
 </body>
 
 </html>
