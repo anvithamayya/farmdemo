@@ -10,6 +10,9 @@ from db import get_db_connection
 from psycopg2.extras import RealDictCursor
 import os
 from fastapi import APIRouter
+from typing import List
+from datetime import datetime
+import json
 
 from fastapi import UploadFile, File
 from fastapi.responses import JSONResponse
@@ -50,6 +53,10 @@ class Category(BaseModel):
     name: str
     description: Optional[str] = None
 
+class CategoryIn(BaseModel):
+    name: str
+    description: Optional[str] = None
+    
 class ProductIn(BaseModel):
     name: str
     category: str
@@ -65,7 +72,17 @@ class CartItemIn(BaseModel):
     email: EmailStr
     product_name: str
     quantity: int = 1
+class OrderItem(BaseModel):
+    name: str
+    price: float
+    quantity: int
 
+class OrderPayload(BaseModel):
+    email: str
+    delivery_address: str  # ✅ required field
+    phone_number: Optional[str] = None
+    orderData: dict
+    cart: List[OrderItem]
 
 # OAuth2 for protected endpoints
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -89,16 +106,17 @@ def register(user: UserCreate):
             return {"message": "User registered successfully"}
 
 @app.post("/token", response_model=LoginResponse)
-def login_token(form_data: OAuth2PasswordRequestForm = Depends()):
+def login_token(user: UserCreate):
+    print(user)
     with get_db_connection() as conn:
-        with conn.cursor(cursor_factory=RealDictCursor) as cur:
-            cur.execute("SELECT password, is_admin FROM users WHERE email = %s;", (form_data.username,))
+        with conn.cursor() as cur:
+            cur.execute("SELECT password, is_admin FROM users WHERE email = %s;", (user.email,))
             result = cur.fetchone()
-            if not result or not bcrypt.verify(form_data.password, result["password"]):
+            if not result or not bcrypt.verify(user.password, result["password"]):
                 raise HTTPException(status_code=401, detail="Invalid credentials")
-
+            print(result)
             return {
-                "access_token": form_data.username,
+                "access_token": user.email,
                 "token_type": "bearer",
                 "is_admin": result["is_admin"]
             }
@@ -130,9 +148,7 @@ def get_categories(token: str = Depends(verify_admin)):
 
 from pydantic import BaseModel
 
-class CategoryIn(BaseModel):
-    name: str
-    description: Optional[str] = None
+
 
 @admin_router.put("/categories/{category_id}")
 def update_category(
@@ -265,13 +281,7 @@ def get_product_by_id(product_id: int, token: str = Depends(verify_admin)):
 from fastapi import Query
 
 @app.post("/cart/add")
-def add_to_cart(
-    item: CartItemIn,
-    email: EmailStr = Query(...)
-):
-    if email != item.email:
-        raise HTTPException(status_code=400, detail="Email mismatch in body and query")
-
+def add_to_cart(item: CartItemIn):
     with get_db_connection() as conn:
         with conn.cursor() as cur:
             cur.execute("""
@@ -280,10 +290,75 @@ def add_to_cart(
                 ON CONFLICT (email, product_name)
                 DO UPDATE SET quantity = cart_items.quantity + EXCLUDED.quantity
                 RETURNING quantity;
-            """, (item.product_name, email, item.quantity))
+            """, (item.product_name, item.email, item.quantity))
 
             result = cur.fetchone()
-            quantity = result[0] if result else item.quantity
+            quantity = result.get("quantity", item.quantity) if result else item.quantity
             conn.commit()
-    
-    return {"message": "Item added to cart successfully", "email": email, "quantity": quantity}
+
+    return {"message": "Item added to cart successfully", "email": item.email, "quantity": quantity}
+
+from fastapi import Query
+
+@app.get("/products/public")
+def get_public_products(category: Optional[str] = Query(None)):
+    with get_db_connection() as conn:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            if category:
+                cur.execute("""
+                    SELECT id, name, category, price, unit, stock, stock_unit, description, image_url, featured
+                    FROM products
+                    WHERE category = %s
+                    ORDER BY id;
+                """, (category,))
+            else:
+                cur.execute("""
+                    SELECT id, name, category, price, unit, stock, stock_unit, description, image_url, featured
+                    FROM products
+                    ORDER BY id;
+                """)
+            return cur.fetchall()
+
+
+@app.post("/orders/create")
+def create_order(payload: OrderPayload):
+    try:
+        with get_db_connection() as conn:
+            with conn.cursor() as cur:
+                order_date = datetime.now()
+
+                # Extract delivery details from orderData
+                delivery = payload.orderData.get("deliveryDetails", {})
+                delivery_address = f"{delivery.get('address', '')}, {delivery.get('city', '')}, {delivery.get('state', '')} - {delivery.get('zip', '')}"
+
+                # Generate order number if missing
+                order_number = payload.orderData.get("orderNumber", f"FN-{datetime.now().year}-{uuid4().hex[:4]}")
+
+                # Calculate total amount
+                total_amount = payload.orderData.get("total", 0)
+
+                # Insert into orders table
+                cur.execute("""
+                    INSERT INTO orders (email, order_number, total_amount, delivery_address, order_data, order_date)
+                    VALUES (%s, %s, %s, %s, %s, %s)
+                """, (
+                    payload.email,
+                    order_number,
+                    total_amount,
+                    delivery_address,
+                    json.dumps(payload.orderData),
+                    order_date
+                ))
+
+                conn.commit()
+        return {"message": "Order placed successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/orders/all")
+def get_all_orders():
+    with get_db_connection() as conn:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute("SELECT * FROM orders ORDER BY order_date DESC;")
+            return cur.fetchall()
+
