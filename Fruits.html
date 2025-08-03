@@ -350,6 +350,7 @@
             // Add to cart handler
             document.querySelectorAll('.add-to-cart').forEach(button => {
                 button.addEventListener('click', function() {
+                    console.log("Add to cart button clicked");
                     const name = this.getAttribute('data-name');
                     const price = parseFloat(this.getAttribute('data-price'));
                     
@@ -462,6 +463,142 @@ updateCartUI();
 // Close the DOMContentLoaded event listener
 }); // This was missing
 
-    </script>
+    </script><script>
+document.addEventListener('DOMContentLoaded', function () {
+    const cartList = document.getElementById('cart-items');
+    const cartTotal = document.getElementById('cart-total');
+    const cartCount = document.getElementById('cart-count');
+
+    function getCart() {
+        const cart = localStorage.getItem('farmNaturalsCart');
+        return cart ? JSON.parse(cart) : [];
+    }
+
+    function saveCart(cart) {
+        localStorage.setItem('farmNaturalsCart', JSON.stringify(cart));
+    }
+
+    function updateCartUI() {
+        const cart = getCart();
+        if (cartList) {
+            cartList.innerHTML = '';
+            let total = 0;
+            let count = 0;
+
+            cart.forEach((item, index) => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                count += item.quantity;
+
+                const li = document.createElement('li');
+                li.className = 'list-group-item d-flex justify-content-between align-items-center';
+                li.innerHTML = `
+                    <div>
+                        <strong>${item.name}</strong><br>
+                        <small>₹${item.price.toFixed(2)} x ${item.quantity}</small>
+                    </div>
+                    <div>
+                        <span class="text-success fw-bold">₹${itemTotal.toFixed(2)}</span>
+                        <button class="btn btn-sm btn-danger ms-2 remove-item" data-index="${index}">&times;</button>
+                    </div>
+                `;
+                cartList.appendChild(li);
+            });
+
+            document.querySelectorAll('.remove-item').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    const cart = getCart();
+                    cart.splice(index, 1);
+                    saveCart(cart);
+                    updateCartUI();
+                });
+            });
+
+            if (cartTotal) cartTotal.textContent = `₹${total.toFixed(2)}`;
+        }
+
+        if (cartCount) cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+        sessionStorage.setItem('checkoutCart', JSON.stringify(cart));
+    }
+
+    function showToast(message) {
+        const toast = document.createElement('div');
+        toast.className = 'position-fixed bottom-0 end-0 p-3';
+        toast.style.zIndex = '11';
+        toast.innerHTML = `
+            <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header bg-success text-white">
+                    <strong class="me-auto">FarmNaturals</strong>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    ${message}
+                </div>
+            </div>
+        `;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+
+    // Add to cart button click handler
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+        button.addEventListener('click', async function () {
+            const name = this.getAttribute('data-name');
+            const price = parseFloat(this.getAttribute('data-price'));
+            const email = localStorage.getItem("user_email");
+
+            if (!email) {
+                showToast("Please login to add items to cart.");
+                return;
+            }
+
+            // Add to local cart
+            const cart = getCart();
+            const existingItem = cart.find(item => item.name === name);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ name, price, quantity: 1 });
+            }
+            saveCart(cart);
+            updateCartUI();
+
+            // Send to backend
+            try {
+                const response = await fetch(`http://localhost:8000/cart/add?email=${encodeURIComponent(email)}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        email: email,
+                        product_name: name,
+                        quantity: 1
+                    })
+                });
+                const result = await response.json();
+                if (!response.ok) {
+                    showToast(result.detail || "Server error adding to cart");
+                } else {
+                    showToast(`${name} added to cart`);
+                }
+            } catch (err) {
+                console.error(err);
+                showToast("Failed to connect to server.");
+            }
+        });
+    });
+
+    document.querySelector('a[href="checkout.html"]').addEventListener('click', function (e) {
+        const cart = getCart();
+        if (cart.length === 0) {
+            e.preventDefault();
+            showToast('Your cart is empty!');
+        }
+    });
+
+    updateCartUI();
+});
+</script>
+
 </body>
 </html>
