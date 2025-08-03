@@ -60,6 +60,13 @@ class ProductIn(BaseModel):
     description: Optional[str] = None
     image_url: Optional[str] = None
     featured: Optional[bool] = False
+
+class CartItemIn(BaseModel):
+    email: EmailStr
+    product_name: str
+    quantity: int = 1
+
+
 # OAuth2 for protected endpoints
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -127,28 +134,6 @@ class CategoryIn(BaseModel):
     name: str
     description: Optional[str] = None
 
-@admin_router.post("/categories")
-def add_category(
-    category: CategoryIn,
-    token: str = Depends(verify_admin)
-):
-    with get_db_connection() as conn:
-        with conn.cursor() as cur:
-            cur.execute(
-                "INSERT INTO categories (name, description) VALUES (%s, %s);",
-                (category.name, category.description)
-            )
-            conn.commit()
-    return {"message": "Category added successfully"}
-
-
-@admin_router.delete("/categories/{category_id}")
-def delete_category(category_id: int, token: str = Depends(verify_admin)):
-    with get_db_connection() as conn:
-        with conn.cursor() as cur:
-            cur.execute("DELETE FROM categories WHERE id = %s;", (category_id,))
-            conn.commit()
-    return {"message": "Category deleted successfully"}
 @admin_router.put("/categories/{category_id}")
 def update_category(
     category_id: int,
@@ -175,6 +160,7 @@ def get_products(token: str = Depends(verify_admin)):
 
 @admin_router.post("/products")
 def add_product(product: ProductIn, token: str = Depends(verify_admin)):
+    # Insert product into the database
     with get_db_connection() as conn:
         with conn.cursor() as cur:
             cur.execute("""
@@ -186,7 +172,44 @@ def add_product(product: ProductIn, token: str = Depends(verify_admin)):
                 product.image_url, product.featured
             ))
             conn.commit()
+
+    # Map category to HTML file
+    CATEGORY_HTML_FILES = {
+        "Fruits": "Fruits.html",
+        "Grains": "Grains.html",
+        "Vegetables": "veg.html",
+        "Dairy": "Dairy.html",
+        "Organic": "Organic.html"
+    }
+
+    file_path = CATEGORY_HTML_FILES.get(product.category)
+    if file_path and os.path.exists(file_path):
+        # Create HTML snippet
+        product_html = f"""
+        <div class="product-card">
+            <div class="product-image">
+                <img src="{product.image_url or 'images/placeholder.jpg'}" alt="{product.name}">
+            </div>
+            <div class="product-info">
+                <h3 class="product-title">{product.name}</h3>
+                <p class="product-price">₹{product.price}/{product.unit}</p>
+                <button class="add-to-cart" data-name="{product.name}" data-price="{product.price}">Add to Cart</button>
+            </div>
+        </div>
+        """
+
+        # Append to products-grid container
+        with open(file_path, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        insert_pos = content.rfind('</div>')  # last </div> of products-grid
+        if insert_pos != -1:
+            new_content = content[:insert_pos] + product_html + '\n' + content[insert_pos:]
+            with open(file_path, "w", encoding="utf-8") as f:
+                f.write(new_content)
+
     return {"message": "Product added successfully"}
+
 
 @admin_router.put("/products/{product_id}")
 def update_product(product_id: int, product: ProductIn, token: str = Depends(verify_admin)):
@@ -226,4 +249,41 @@ async def upload_image(file: UploadFile = File(...)):
     file_path = os.path.join(UPLOAD_DIR, file.filename)
     with open(file_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
-    return {"url": f"/images/{file.filename}"}
+    return {"url": f"images/{file.filename}"}
+from fastapi.staticfiles import StaticFiles
+
+app.mount("/images", StaticFiles(directory=r"D:\farm demo\images"), name="images")
+@admin_router.get("/products/{product_id}")
+def get_product_by_id(product_id: int, token: str = Depends(verify_admin)):
+    with get_db_connection() as conn:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute("SELECT * FROM products WHERE id = %s;", (product_id,))
+            product = cur.fetchone()
+            if not product:
+                raise HTTPException(status_code=404, detail="Product not found")
+            return product
+from fastapi import Query
+
+@app.post("/cart/add")
+def add_to_cart(
+    item: CartItemIn,
+    email: EmailStr = Query(...)
+):
+    if email != item.email:
+        raise HTTPException(status_code=400, detail="Email mismatch in body and query")
+
+    with get_db_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute("""
+                INSERT INTO cart_items (product_name, email, quantity)
+                VALUES (%s, %s, %s)
+                ON CONFLICT (email, product_name)
+                DO UPDATE SET quantity = cart_items.quantity + EXCLUDED.quantity
+                RETURNING quantity;
+            """, (item.product_name, email, item.quantity))
+
+            result = cur.fetchone()
+            quantity = result[0] if result else item.quantity
+            conn.commit()
+    
+    return {"message": "Item added to cart successfully", "email": email, "quantity": quantity}
