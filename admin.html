@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - FarmNaturals</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
@@ -232,14 +233,13 @@
                 <div class="d-flex align-items-center">
                     <div class="dropdown">
                         <a href="#" class="dropdown-toggle d-flex align-items-center" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                            <img src="https://via.placeholder.com/40" class="rounded-circle me-2" alt="Admin">
                             <span>Admin User</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Profile</a></li>
                             <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Settings</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
+                            <li><a class="dropdown-item" href="login.html"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
                         </ul>
                     </div>
                 </div>
@@ -248,175 +248,61 @@
 
         <!-- Dashboard Section -->
 <section id="dashboard" class="section">
-            <div class="row mb-4">
-                <div class="col-md-3 mb-3">
-                    <div class="card card-stat stat-orders">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="text-muted">Total Orders</h6>
-                                    <h3>128</h3>
-                                    <p class="mb-0 text-success"><small>+12% from last month</small></p>
-                                </div>
-                                <i class="fas fa-shopping-cart"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <div class="card card-stat stat-products">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="text-muted">Total Products</h6>
-                                    <h3>56</h3>
-                                    <p class="mb-0 text-info"><small>+5 new this month</small></p>
-                                </div>
-                                <i class="fas fa-shopping-basket"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <div class="card card-stat stat-revenue">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="text-muted">Total Revenue</h6>
-                                    <h3>₹42,580</h3>
-                                    <p class="mb-0 text-success"><small>+18% from last month</small></p>
-                                </div>
-                                <i class="fas fa-rupee-sign"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <div class="card card-stat stat-users">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="text-muted">Total Customers</h6>
-                                    <h3>84</h3>
-                                    <p class="mb-0 text-muted"><small>+8 new this month</small></p>
-                                </div>
-                                <i class="fas fa-users"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+  <div class="row mb-4">
+    <div class="col-md-3 mb-3">
+      <div class="card card-stat stat-orders">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="text-muted">Total Orders</h6>
+              <h3 id="statOrders">0</h3>
             </div>
-
-            <div class="row">
-                <div class="col-md-8 mb-4">
-                    <div class="card">
-                        <div class="card-header bg-white">
-                            <h5 class="mb-0">Recent Orders</h5>
-                        </div>
-                        <div class="card-body p-0">
-                            <div class="table-responsive">
-                                <table class="table table-hover mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th>Order ID</th>
-                                            <th>Customer</th>
-                                            <th>Date</th>
-                                            <th>Amount</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>FN-2025-1256</td>
-                                            <td>Rahul Sharma</td>
-                                            <td>12 Jun 2025</td>
-                                            <td>₹1,250</td>
-                                            <td><span class="badge bg-success">Delivered</span></td>
-                                            <td><a href="#" class="btn btn-sm btn-admin-outline">View</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>FN-2025-1255</td>
-                                            <td>Priya Patel</td>
-                                            <td>11 Jun 2025</td>
-                                            <td>₹980</td>
-                                            <td><span class="badge bg-primary">Shipped</span></td>
-                                            <td><a href="#" class="btn btn-sm btn-admin-outline">View</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>FN-2025-1254</td>
-                                            <td>Amit Singh</td>
-                                            <td>10 Jun 2025</td>
-                                            <td>₹1,750</td>
-                                            <td><span class="badge bg-warning text-dark">Processing</span></td>
-                                            <td><a href="#" class="btn btn-sm btn-admin-outline">View</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>FN-2025-1253</td>
-                                            <td>Neha Gupta</td>
-                                            <td>09 Jun 2025</td>
-                                            <td>₹2,150</td>
-                                            <td><span class="badge bg-danger">Cancelled</span></td>
-                                            <td><a href="#" class="btn btn-sm btn-admin-outline">View</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>FN-2025-1252</td>
-                                            <td>Vikram Joshi</td>
-                                            <td>08 Jun 2025</td>
-                                            <td>₹850</td>
-                                            <td><span class="badge bg-success">Delivered</span></td>
-                                            <td><a href="#" class="btn btn-sm btn-admin-outline">View</a></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <div class="card-header bg-white">
-                            <h5 class="mb-0">Low Stock Products</h5>
-                        </div>
-                        <div class="card-body p-0">
-                            <div class="table-responsive">
-                                <table class="table table-hover mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th>Product</th>
-                                            <th>Stock</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Organic Tomatoes</td>
-                                            <td><span class="badge badge-out-of-stock">Out of Stock</span></td>
-                                            <td><a href="#" class="btn btn-sm btn-admin-outline">Restock</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Alphonso Mangoes</td>
-                                            <td><span class="badge badge-low-stock">Low Stock (5)</span></td>
-                                            <td><a href="#" class="btn btn-sm btn-admin-outline">Restock</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Premium Basmati Rice</td>
-                                            <td><span class="badge badge-low-stock">Low Stock (3)</span></td>
-                                            <td><a href="#" class="btn btn-sm btn-admin-outline">Restock</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Fresh Grapes</td>
-                                            <td><span class="badge badge-in-stock">In Stock (15)</span></td>
-                                            <td><a href="#" class="btn btn-sm btn-admin-outline">View</a></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <i class="fas fa-shopping-cart"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card card-stat stat-products">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="text-muted">Total Products</h6>
+              <h3 id="statProducts">0</h3>
             </div>
-        </section>
+            <i class="fas fa-shopping-basket"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card card-stat stat-revenue">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="text-muted">Total Revenue</h6>
+              <h3 id="statRevenue">₹0</h3>
+            </div>
+            <i class="fas fa-rupee-sign"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card card-stat stat-users">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="text-muted">Total Customers</h6>
+              <h3 id="statUsers">0</h3>
+            </div>
+            <i class="fas fa-users"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
         <!-- Products Section -->
 <section id="products" class="section" style="display: none;">
@@ -491,13 +377,15 @@
                         Filter Orders
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">All Orders</a></li>
-                        <li><a class="dropdown-item" href="#">Pending</a></li>
-                        <li><a class="dropdown-item" href="#">Processing</a></li>
-                        <li><a class="dropdown-item" href="#">Shipped</a></li>
-                        <li><a class="dropdown-item" href="#">Delivered</a></li>
-                        <li><a class="dropdown-item" href="#">Cancelled</a></li>
-                    </ul>
+    <li><a class="dropdown-item" href="#">All Orders</a></li>
+    <li><a class="dropdown-item" href="#">Pending</a></li>
+    <li><a class="dropdown-item" href="#">Processing</a></li>
+    <li><a class="dropdown-item" href="#">Confirmed</a></li> <!-- ✅ Added -->
+    <li><a class="dropdown-item" href="#">Shipped</a></li>
+    <li><a class="dropdown-item" href="#">Delivered</a></li>
+    <li><a class="dropdown-item" href="#">Cancelled</a></li>
+</ul>
+
                 </div>
             </div>
             
@@ -507,14 +395,7 @@
                         <div class="col-md-6">
                             <h5 class="mb-0">Recent Orders</h5>
                         </div>
-                        <div class="col-md-6">
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Search orders...">
-                                <button class="btn btn-outline-secondary" type="button">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
                 <div class="card-body p-0">
@@ -531,106 +412,21 @@
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td>FN-2025-1256</td>
-                                    <td>Rahul Sharma</td>
-                                    <td>12 Jun 2025</td>
-                                    <td>3</td>
-                                    <td>₹1,250</td>
-                                    <td><span class="badge bg-success">Delivered</span></td>
-                                    <td>
-                                        <button class="btn btn-sm btn-admin-outline me-1" data-bs-toggle="modal" data-bs-target="#orderDetailsModal">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-admin-outline">
-                                            <i class="fas fa-print"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>FN-2025-1255</td>
-                                    <td>Priya Patel</td>
-                                    <td>11 Jun 2025</td>
-                                    <td>2</td>
-                                    <td>₹980</td>
-                                    <td><span class="badge bg-primary">Shipped</span></td>
-                                    <td>
-                                        <button class="btn btn-sm btn-admin-outline me-1" data-bs-toggle="modal" data-bs-target="#orderDetailsModal">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-admin-outline">
-                                            <i class="fas fa-print"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>FN-2025-1254</td>
-                                    <td>Amit Singh</td>
-                                    <td>10 Jun 2025</td>
-                                    <td>4</td>
-                                    <td>₹1,750</td>
-                                    <td><span class="badge bg-warning text-dark">Processing</span></td>
-                                    <td>
-                                        <button class="btn btn-sm btn-admin-outline me-1" data-bs-toggle="modal" data-bs-target="#orderDetailsModal">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-admin-outline">
-                                            <i class="fas fa-print"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>FN-2025-1253</td>
-                                    <td>Neha Gupta</td>
-                                    <td>09 Jun 2025</td>
-                                    <td>5</td>
-                                    <td>₹2,150</td>
-                                    <td><span class="badge bg-danger">Cancelled</span></td>
-                                    <td>
-                                        <button class="btn btn-sm btn-admin-outline me-1" data-bs-toggle="modal" data-bs-target="#orderDetailsModal">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-admin-outline">
-                                            <i class="fas fa-print"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>FN-2025-1252</td>
-                                    <td>Vikram Joshi</td>
-                                    <td>08 Jun 2025</td>
-                                    <td>2</td>
-                                    <td>₹850</td>
-                                    <td><span class="badge bg-success">Delivered</span></td>
-                                    <td>
-                                        <button class="btn btn-sm btn-admin-outline me-1" data-bs-toggle="modal" data-bs-target="#orderDetailsModal">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-admin-outline">
-                                            <i class="fas fa-print"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
+                            <tbody id="orderTableBody">
+  <tr><td colspan="7" class="text-center text-muted">Loading orders...</td></tr>
+</tbody>
+
                         </table>
                     </div>
                 </div>
                 <div class="card-footer bg-white">
-                    <nav aria-label="Page navigation">
-                        <ul class="pagination justify-content-center mb-0">
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" tabindex="-1">Previous</a>
-                            </li>
-                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">Next</a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
+  <nav aria-label="Order pagination">
+    <ul class="pagination justify-content-center mb-0" id="pagination">
+      <!-- Pagination buttons will be inserted here dynamically -->
+    </ul>
+  </nav>
+</div>
+
             </div>
         </section>
 
@@ -746,11 +542,17 @@
                             <label for="productPrice" class="form-label">Price (₹)</label>
                             <div class="input-group">
                                 <input type="number" class="form-control" id="productPrice" step="0.01" required>
-                                <select class="form-select" id="priceUnit" style="max-width: 100px;">
-                                    <option value="kg">per kg</option>
-                                    <option value="g">per 100g</option>
-                                    <option value="each">per unit</option>
-                                </select>
+                               <select class="form-select" id="priceUnit" style="max-width: 100px;">
+    <option value="kg">per kg</option>
+    <option value="g">per 100g</option>
+    <option value="each">per unit</option>
+    <option value="dozen">per dozen</option>
+    <option value="litre">per litre</option>
+    <option value="ml">per 100ml</option>
+    <option value="packet">per packet</option>
+    <option value="box">per box</option>
+</select>
+
                             </div>
                         </div>
                         
@@ -776,12 +578,7 @@
                         <label for="productImage" class="form-label">Product Image</label>
 <input type="file" id="productImage" name="productImage" class="form-control" />
                     </div>
-                    <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" id="productFeatured">
-                        <label class="form-check-label" for="productFeatured">
-                            Featured Product
-                        </label>
-                    </div>
+                    
                 
             </div>
             <div class="modal-footer">
@@ -853,11 +650,7 @@
             <input type="file" id="editProductImage" class="form-control">
           </div>
 
-          <div class="form-check mb-3">
-            <input class="form-check-input" type="checkbox" id="editProductFeatured">
-            <label class="form-check-label" for="editProductFeatured">Featured Product</label>
-          </div>
-        </div>
+          
 
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -867,101 +660,6 @@
     </div>
   </div>
 </div>
-
-    <!-- Order Details Modal -->
-    <div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="orderDetailsModalLabel">Order Details - FN-2025-1256</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <h6>Customer Information</h6>
-                            <p>
-                                <strong>Rahul Sharma</strong><br>
-                                rahul.sharma@example.com<br>
-                                9876543210<br>
-                                123 Garden Apartments, Mumbai, Maharashtra - 400001
-                            </p>
-                        </div>
-                        <div class="col-md-6">
-                            <h6>Order Information</h6>
-                            <p>
-                                <strong>Order Date:</strong> 12 Jun 2025<br>
-                                <strong>Order Status:</strong> <span class="badge bg-success">Delivered</span><br>
-                                <strong>Payment Method:</strong> Credit Card<br>
-                                <strong>Delivery Date:</strong> 15 Jun 2025
-                            </p>
-                        </div>
-                    </div>
-                    
-                    <div class="table-responsive mb-4">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Product</th>
-                                    <th>Price</th>
-                                    <th>Quantity</th>
-                                    <th>Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Organic Tomatoes</td>
-                                    <td>₹60/kg</td>
-                                    <td>2</td>
-                                    <td>₹120</td>
-                                </tr>
-                                <tr>
-                                    <td>Sweet Oranges</td>
-                                    <td>₹80/kg</td>
-                                    <td>1</td>
-                                    <td>₹80</td>
-                                </tr>
-                                <tr>
-                                    <td>Premium Basmati Rice</td>
-                                    <td>₹120/kg</td>
-                                    <td>1</td>
-                                    <td>₹120</td>
-                                </tr>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="3" class="text-end"><strong>Subtotal:</strong></td>
-                                    <td>₹320</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="3" class="text-end"><strong>Delivery Fee:</strong></td>
-                                    <td>₹49</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="3" class="text-end"><strong>Total:</strong></td>
-                                    <td>₹369</td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="orderStatus" class="form-label">Update Order Status</label>
-                        <select class="form-select" id="orderStatus">
-                            <option selected>Delivered</option>
-                            <option>Processing</option>
-                            <option>Shipped</option>
-                            <option>Cancelled</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-admin">Update Status</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Add Category Modal -->
     <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
@@ -1020,15 +718,74 @@
             </div>
         </div>
     </div>
+  </div>
+<!-- 🟢 Place modal here -->
+<div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="orderDetailsModalLabel">Order Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Customer and Order Info Sections -->
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <h6>Customer Information</h6>
+            <p id="customerInfo"></p>
+          </div>
+          <div class="col-md-6">
+            <h6>Order Information</h6>
+            <p id="orderMeta"></p>
+          </div>
+        </div>
+
+        <div class="table-responsive mb-4">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody id="orderItems"></tbody>
+            <tfoot id="orderTotals"></tfoot>
+          </table>
+        </div>
+
+        <div class="mb-3">
+          <label for="orderStatus" class="form-label">Update Order Status</label>
+          <select class="form-select" id="orderStatus">
+            <option>Pending</option>
+            <option>Processing</option>
+            <option>Confirmed</option>
+            <option>Shipped</option>
+            <option>Delivered</option>
+            <option>Cancelled</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-admin" onclick="updateOrderStatus()">Update Status</button>
+      </div>
+    </div>
+  </div>
 </div>
 
+<!-- ✅ Modal now ends here -->
 
-    
     <!-- Bootstrap JS Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
 <script>
         const API_BASE = "http://localhost:8000";
+let allOrders = [];
+let currentPage = 1;
+const itemsPerPage = 10;
 
 document.addEventListener("DOMContentLoaded", function () {
     const token = localStorage.getItem("adminToken");  
@@ -1119,9 +876,14 @@ document.querySelectorAll('.sidebar-menu a[data-section]').forEach(link => {
         if (sectionId === "categories") {
             loadCategories();
         }
-        if (sectionId === "products") {
+        else if (sectionId === "products") {
     loadProducts(); // 🛠 Load products when switching to Products section
 }
+else if (sectionId === "orders") {
+      loadOrders();
+    } else if (sectionId === "dashboard") {
+      loadDashboardStats(); 
+    }
 
         // Update section title
         const sectionTitle = this.textContent.trim();
@@ -1186,26 +948,30 @@ window.editCategory = async function (id) {
 document.getElementById("editCategoryForm").addEventListener("submit", async function (e) {
   e.preventDefault();
 
-  const id = document.getElementById("editCategoryId").value;
-  const name = document.getElementById("editCategoryName").value;
-  const description = document.getElementById("editCategoryDescription").value;
+  const id = document.getElementById("editCategoryId").value.trim();
+  const name = document.getElementById("editCategoryName").value.trim();
+  const description = document.getElementById("editCategoryDescription").value.trim();
 
   const token = localStorage.getItem("adminToken");
+  if (!token) {
+    alert("⚠️ Admin token missing. Please log in again.");
+    return;
+  }
 
   try {
-    const res = await fetch(`http://localhost:8000/admin/api/categories/${id}`, {
+    const res = await fetch(`${API_BASE}/admin/api/categories/${id}`, {
       method: "PUT",
       headers: {
-        "Content-Type": "application/json", // ✅ REQUIRED when sending JSON
+        "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`
       },
-      body: JSON.stringify({ name, description }) // ✅ Send plain JSON
+      body: JSON.stringify({ name, description })
     });
 
     if (res.ok) {
       alert("✅ Category updated successfully!");
       bootstrap.Modal.getInstance(document.getElementById("editCategoryModal")).hide();
-      loadCategories(); // Reload updated category list
+      loadCategories(); // refresh list
     } else {
       const err = await res.json();
       alert("❌ Error: " + (err.detail || "Unknown error"));
@@ -1228,7 +994,6 @@ if (addProductForm) {
         const stock = parseFloat(document.getElementById("productStock").value);
         const stock_unit = document.getElementById("stockUnit").value;
         const description = document.getElementById("productDescription").value;
-        const featured = document.getElementById("productFeatured").checked;
 
         const imageInput = document.getElementById("productImage");
 let image_url = "";
@@ -1266,7 +1031,6 @@ try {
             stock,
             stock_unit,
             description,
-            featured,
             image_url  // ✅ use the uploaded image path here
         })
 
@@ -1368,7 +1132,6 @@ window.editProduct = async function (productId) {
         document.getElementById("editProductStock").value = product.stock;
         document.getElementById("editStockUnit").value = product.stock_unit;
         document.getElementById("editProductDescription").value = product.description || "";
-        document.getElementById("editProductFeatured").checked = product.featured;
 
         const modal = new bootstrap.Modal(document.getElementById("editProductModal"));
         modal.show();
@@ -1388,7 +1151,6 @@ document.getElementById("editProductForm").addEventListener("submit", async func
     const stock = parseFloat(document.getElementById("editProductStock").value);
     const stock_unit = document.getElementById("editStockUnit").value;
     const description = document.getElementById("editProductDescription").value;
-    const featured = document.getElementById("editProductFeatured").checked;
 
     let image_url = null;
     const imageInput = document.getElementById("editProductImage");
@@ -1417,7 +1179,7 @@ document.getElementById("editProductForm").addEventListener("submit", async func
         stock,
         stock_unit,
         description,
-        featured
+        
     };
 
     if (image_url) {
@@ -1476,21 +1238,307 @@ async function deleteProduct(productId) {
 }
 
 window.loadProducts = loadProducts;
-fetch("http://localhost:8000/orders/all")
-  .then(response => response.json())
-  .then(data => {
-    const table = document.getElementById("orders-table");
-    data.forEach(order => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${order.id}</td>
-        <td>${order.email}</td>
-        <td>${new Date(order.order_date).toLocaleString()}</td>
-        <td><pre>${JSON.stringify(order.order_data, null, 2)}</pre></td>
+
+
+loadOrders();// In admin.html, replace the orders loading code with this:
+
+window.viewOrderDetails = function(order) {
+  console.log("ORDER DATA:", order);
+    console.log("👁️ viewOrderDetails CALLED with:", order);
+
+
+  let orderData;
+  try {
+    orderData = typeof order.order_data === 'string'
+      ? JSON.parse(order.order_data)
+      : order.order_data;
+  } catch (err) {
+    console.error("❌ Failed to parse order_data", err);
+    orderData = { cart: [], deliveryDetails: {} };
+  }
+
+  const delivery = orderData.deliveryDetails || {};
+  const customerName = delivery.name || `${delivery.firstName || ''} ${delivery.lastName || ''}`.trim() || order.email;
+
+  // ✅ Update Customer Info
+  const customerInfoEl = document.getElementById("customerInfo");
+  if (customerInfoEl) {
+    customerInfoEl.innerHTML = `
+      <strong>${customerName}</strong><br>
+      ${order.email || "No email"}<br>
+      ${delivery.phone || "No phone"}<br>
+      ${delivery.address || "No address"}, ${delivery.city || ""}, ${delivery.state || ""} - ${delivery.zip || ""}
+    `;
+  }
+
+  // ✅ Update Order Meta Info
+  const orderMetaEl = document.getElementById("orderMeta");
+  if (orderMetaEl) {
+    orderMetaEl.innerHTML = `
+      <strong>Order Date:</strong> ${new Date(order.order_date).toLocaleDateString()}<br>
+      <strong>Order Status:</strong> <span class="badge bg-success">${order.status || 'Processing'}</span><br>
+      <strong>Payment Method:</strong> ${order.payment_method || "Unknown"}<br>
+      <strong>Delivery Date:</strong> ${orderData.deliveryDate || "Not specified"}
+    `;
+  }
+
+  // ✅ Populate items
+  const itemsTbody = document.getElementById("orderItems");
+  itemsTbody.innerHTML = "";
+
+  const items = orderData.cart || orderData.items || [];
+
+  if (items.length > 0) {
+    items.forEach(item => {
+      itemsTbody.innerHTML += `
+        <tr>
+          <td>${item.name || "Unnamed"}</td>
+          <td>₹${(item.price || 0).toFixed(2)}</td>
+          <td>${item.quantity || 1}</td>
+          <td>₹${((item.price || 0) * (item.quantity || 1)).toFixed(2)}</td>
+        </tr>
       `;
-      table.appendChild(tr);
     });
+  } else {
+    itemsTbody.innerHTML = `<tr><td colspan="4" class="text-muted">No items found</td></tr>`;
+  }
+
+  // ✅ Totals
+  const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const deliveryFee = 49;
+  const total = order.total_amount || subtotal + deliveryFee;
+
+  const tfoot = document.getElementById("orderTotals");
+  tfoot.innerHTML = `
+    <tr>
+      <td colspan="3" class="text-end"><strong>Subtotal:</strong></td>
+      <td>₹${subtotal.toFixed(2)}</td>
+    </tr>
+    <tr>
+      <td colspan="3" class="text-end"><strong>Delivery Fee:</strong></td>
+      <td>₹${deliveryFee.toFixed(2)}</td>
+    </tr>
+    <tr>
+      <td colspan="3" class="text-end"><strong>Total:</strong></td>
+      <td>₹${total.toFixed(2)}</td>
+    </tr>
+  `;
+
+  // ✅ Update status dropdown
+  const statusSelect = document.getElementById("orderStatus");
+  if (statusSelect) {
+    statusSelect.value = order.status || "Pending";
+  }
+
+  // ✅ Store ID for update
+  window.selectedOrderId = order.order_number;
+
+  // ✅ Show the modal
+  const modalEl = document.getElementById("orderDetailsModal");
+  if (modalEl) {
+    setTimeout(() => {
+  const modal = new bootstrap.Modal(modalEl);
+  modal.show();
+}, 50);
+
+  } else {
+    console.error("❌ Modal element not found!");
+  }
+};
+
+// Update the section switching to load orders when orders section is clicked
+document.querySelectorAll('.sidebar-menu a[data-section]').forEach(link => {
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    const sectionId = this.getAttribute('data-section');
+    showSection(sectionId);
+
+    if (sectionId === "categories") {
+      loadCategories();
+    } else if (sectionId === "products") {
+      loadProducts();
+    } else if (sectionId === "orders") {
+      loadOrders();
+    }
+    else if (sectionId === "dashboard") loadDashboardStats(); 
+
+    const sectionTitle = this.textContent.trim();
+    document.getElementById('currentSection').textContent = sectionTitle;
   });
+});
+async function loadOrders(filterStatus = null) {
+  const token = localStorage.getItem("adminToken");
+  try {
+    const res = await fetch(`${API_BASE}/admin/api/orders`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+
+    const orders = await res.json();
+    allOrders = filterStatus ? orders.filter(o => o.status === filterStatus) : orders;
+    currentPage = 1;
+
+    renderOrders();
+    renderPagination();
+  } catch (err) {
+    console.error("Error loading orders:", err);
+    document.getElementById("orderTableBody").innerHTML =
+      `<tr><td colspan="7" class="text-danger text-center">Failed to load orders</td></tr>`;
+  }
+}
+function renderOrders() {
+  const tbody = document.getElementById("orderTableBody");
+  tbody.innerHTML = "";
+
+  const start = (currentPage - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  const pageOrders = allOrders.slice(start, end);
+
+  if (pageOrders.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted">No orders found</td></tr>`;
+    return;
+  }
+
+  pageOrders.forEach(order => {
+    let orderData;
+    try {
+      orderData = typeof order.order_data === 'string' ? JSON.parse(order.order_data) : order.order_data;
+    } catch {
+      orderData = { items: [], deliveryDetails: {} };
+    }
+
+const itemsCount = orderData.cart?.length || 0;
+    const customerName = orderData.deliveryDetails?.name || order.email || "Unknown";
+
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${order.order_number}</td>
+      <td>${customerName}</td>
+      <td>${new Date(order.order_date).toLocaleDateString()}</td>
+      <td>${itemsCount}</td>
+      <td>₹${order.total_amount.toFixed(2)}</td>
+      <td>
+        <span class="badge ${
+          order.status === 'Delivered' ? 'bg-success' :
+          order.status === 'Cancelled' ? 'bg-danger' :
+          order.status === 'Shipped' ? 'bg-primary' :
+          order.status === 'Pending' ? 'bg-secondary' :
+          order.status === 'Confirmed' ? 'bg-info' :
+          order.status === 'Processing' ? 'bg-warning text-dark' :
+          'bg-light text-dark'
+        }">${order.status}</span>
+      </td>
+      <td>
+        <button class="btn btn-sm btn-admin-outline me-1" onclick='viewOrderDetails(${JSON.stringify(order)})'>
+            <i class="fas fa-eye"></i>
+          </button>
+      </td>
+    `;
+    tbody.appendChild(row);
+  });
+}
+function renderPagination() {
+  const pagination = document.getElementById("pagination");
+  if (!pagination) return;
+
+  const totalPages = Math.ceil(allOrders.length / itemsPerPage);
+  pagination.innerHTML = "";
+
+  const createButton = (label, page, disabled = false, active = false) => {
+    const li = document.createElement("li");
+    li.className = `page-item ${disabled ? "disabled" : ""} ${active ? "active" : ""}`;
+    const a = document.createElement("a");
+    a.className = "page-link";
+    a.href = "#";
+    a.innerText = label;
+    a.onclick = (e) => {
+      e.preventDefault();
+      if (!disabled) {
+        currentPage = page;
+        renderOrders();
+        renderPagination();
+      }
+    };
+    li.appendChild(a);
+    return li;
+  };
+
+  pagination.appendChild(createButton("Previous", currentPage - 1, currentPage === 1));
+
+  for (let i = 1; i <= totalPages; i++) {
+    pagination.appendChild(createButton(i, i, false, currentPage === i));
+  }
+
+  pagination.appendChild(createButton("Next", currentPage + 1, currentPage === totalPages));
+}
+
+async function updateOrderStatus() {
+  const token = localStorage.getItem("adminToken");
+  const status = document.getElementById("orderStatus").value;
+
+  try {
+    const res = await fetch(`${API_BASE}/admin/api/orders/${window.selectedOrderId}/status`, {
+      method: "PUT",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ status })
+    });
+
+    if (!res.ok) throw new Error("Failed to update status");
+
+    alert("✅ Order status updated");
+    document.querySelector(".modal.show .btn-close").click(); // Close modal
+    loadOrders(); // Refresh table
+  } catch (err) {
+    console.error(err);
+    alert("❌ Error updating order status");
+  }
+}
+document.querySelectorAll('.dropdown-menu .dropdown-item').forEach(item => {
+  item.addEventListener('click', function () {
+    const status = this.textContent.trim();
+    loadOrders(status === 'All Orders' ? null : status);
+  });
+});
+
+async function loadDashboardStats() {
+  const token = localStorage.getItem("adminToken");
+  try {
+    const res = await fetch(`${API_BASE}/admin/api/stats`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    if (!res.ok) throw new Error("Failed to fetch stats");
+
+    const stats = await res.json();
+    document.getElementById("statOrders").textContent = stats.total_orders;
+    document.getElementById("statProducts").textContent = stats.total_products;
+    document.getElementById("statRevenue").textContent = `₹${stats.total_revenue}`;
+    document.getElementById("statUsers").textContent = stats.total_customers;
+  } catch (err) {
+    console.error("Dashboard stats error:", err);
+  }
+}
+document.addEventListener("DOMContentLoaded", function () {
+  loadDashboardStats(); // ✅ Initial load
+});
+
+
+function filterOrders(status) {
+  const rows = document.querySelectorAll("#orderTableBody tr");
+  rows.forEach(row => {
+    const orderStatus = row.querySelector("td:nth-child(6) .badge")?.textContent.trim();
+    if (status === "All" || orderStatus === status) {
+      row.style.display = "";
+    } else {
+      row.style.display = "none";
+    }
+  });
+}
+
 
 </script>
 
