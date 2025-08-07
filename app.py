@@ -13,10 +13,7 @@ from fastapi import APIRouter
 from typing import List
 from datetime import datetime
 import json
-
-from fastapi import UploadFile, File
 from fastapi.responses import JSONResponse
-
 from fastapi import Body
 
 from uuid import uuid4
@@ -56,7 +53,7 @@ class Category(BaseModel):
 class CategoryIn(BaseModel):
     name: str
     description: Optional[str] = None
-    
+
 class ProductIn(BaseModel):
     name: str
     category: str
@@ -79,10 +76,10 @@ class OrderItem(BaseModel):
 
 class OrderPayload(BaseModel):
     email: str
-    delivery_address: str  # ✅ required field
-    phone_number: Optional[str] = None
     orderData: dict
     cart: List[OrderItem]
+    payment_method: str  # ✅ Required field
+
 
 # OAuth2 for protected endpoints
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -106,17 +103,15 @@ def register(user: UserCreate):
             return {"message": "User registered successfully"}
 
 @app.post("/token", response_model=LoginResponse)
-def login_token(user: UserCreate):
-    print(user)
+def login_token(form_data: OAuth2PasswordRequestForm = Depends()):
     with get_db_connection() as conn:
-        with conn.cursor() as cur:
-            cur.execute("SELECT password, is_admin FROM users WHERE email = %s;", (user.email,))
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute("SELECT password, is_admin FROM users WHERE email = %s;", (form_data.username,))
             result = cur.fetchone()
-            if not result or not bcrypt.verify(user.password, result["password"]):
+            if not result or not bcrypt.verify(form_data.password, result["password"]):
                 raise HTTPException(status_code=401, detail="Invalid credentials")
-            print(result)
             return {
-                "access_token": user.email,
+                "access_token": form_data.username,
                 "token_type": "bearer",
                 "is_admin": result["is_admin"]
             }
@@ -226,7 +221,6 @@ def add_product(product: ProductIn, token: str = Depends(verify_admin)):
 
     return {"message": "Product added successfully"}
 
-
 @admin_router.put("/products/{product_id}")
 def update_product(product_id: int, product: ProductIn, token: str = Depends(verify_admin)):
     with get_db_connection() as conn:
@@ -252,7 +246,6 @@ def delete_product(product_id: int, token: str = Depends(verify_admin)):
             conn.commit()
     return {"message": "Product deleted successfully"}
 # Mount the router
-app.include_router(admin_router)
 from fastapi import UploadFile, File
 import shutil
 import os
@@ -327,27 +320,30 @@ def create_order(payload: OrderPayload):
             with conn.cursor() as cur:
                 order_date = datetime.now()
 
-                # Extract delivery details from orderData
                 delivery = payload.orderData.get("deliveryDetails", {})
                 delivery_address = f"{delivery.get('address', '')}, {delivery.get('city', '')}, {delivery.get('state', '')} - {delivery.get('zip', '')}"
 
-                # Generate order number if missing
                 order_number = payload.orderData.get("orderNumber", f"FN-{datetime.now().year}-{uuid4().hex[:4]}")
-
-                # Calculate total amount
                 total_amount = payload.orderData.get("total", 0)
 
-                # Insert into orders table
+                # ✅ Inject cart into orderData
+                payload.orderData["cart"] = [item.dict() for item in payload.cart]
+
                 cur.execute("""
-                    INSERT INTO orders (email, order_number, total_amount, delivery_address, order_data, order_date)
-                    VALUES (%s, %s, %s, %s, %s, %s)
+                    INSERT INTO orders (
+                        email, order_number, total_amount, delivery_address,
+                        order_data, order_date, payment_method, status
+                    )
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
                 """, (
                     payload.email,
                     order_number,
                     total_amount,
                     delivery_address,
                     json.dumps(payload.orderData),
-                    order_date
+                    order_date,
+                    payload.payment_method,
+                    "Processing"
                 ))
 
                 conn.commit()
@@ -355,10 +351,62 @@ def create_order(payload: OrderPayload):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/orders/all")
-def get_all_orders():
+
+@app.get("/orders/status/{order_id}")
+def get_order_status(order_id: str):
+    with get_db_connection() as conn:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute("SELECT status FROM orders WHERE order_number = %s;", (order_id,))
+            result = cur.fetchone()
+            if not result:
+                raise HTTPException(status_code=404, detail="Order not found")
+            return {"status": result["status"]}
+
+
+@app.get("/orders/user/{email}")
+def get_user_orders(email: str):
+    with get_db_connection() as conn:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute("SELECT order_number, total_amount, order_date, status FROM orders WHERE email = %s ORDER BY order_date DESC;", (email,))
+            return cur.fetchall()
+
+
+@admin_router.get("/orders")
+def get_all_orders(token: str = Depends(verify_admin)):
     with get_db_connection() as conn:
         with conn.cursor(cursor_factory=RealDictCursor) as cur:
             cur.execute("SELECT * FROM orders ORDER BY order_date DESC;")
             return cur.fetchall()
 
+@admin_router.get("/stats")
+def get_dashboard_stats(token: str = Depends(verify_admin)):
+    with get_db_connection() as conn:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute("SELECT COUNT(*) AS total_orders, COALESCE(SUM(total_amount), 0) AS total_revenue FROM orders;")
+            order_stats = cur.fetchone()
+
+            cur.execute("SELECT COUNT(*) AS total_products FROM products;")
+            product_stats = cur.fetchone()
+
+            cur.execute("SELECT COUNT(*) AS total_customers FROM users WHERE is_admin = FALSE;")
+            customer_stats = cur.fetchone()
+
+            return {
+                "total_orders": order_stats["total_orders"],
+                "total_revenue": int(order_stats["total_revenue"]),
+                "total_products": product_stats["total_products"],
+                "total_customers": customer_stats["total_customers"]
+            }
+
+@admin_router.put("/orders/{order_number}/status")
+def update_order_status(order_number: str, payload: dict = Body(...), token: str = Depends(verify_admin)):
+    status = payload.get("status")
+    if not status:
+        raise HTTPException(status_code=400, detail="Status is required")
+    
+    with get_db_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute("UPDATE orders SET status = %s WHERE order_number = %s;", (status, order_number))
+            conn.commit()
+    return {"message": "Order status updated"}
+app.include_router(admin_router)
