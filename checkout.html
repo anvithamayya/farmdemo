@@ -260,7 +260,7 @@
                 </div>
                 <div class="col-12">
                   <label for="cardName" class="form-label">Name on Card</label>
-                  <input type="text" class="form-control" id="cardName" placeholder="John Doe" required>
+                  <input type="text" class="form-control" id="cardName" placeholder="Name" required>
                   <div class="invalid-feedback">Please enter name on card</div>
                 </div>
               </div>
@@ -389,238 +389,289 @@
   <!-- Bootstrap JS Bundle with Popper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const API_BASE = "http://localhost:8000";
-      const userEmail = localStorage.getItem("user_email");
-      const cartKey = userEmail ? `farmNaturalsCart_${userEmail}` : null;
+ <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    autofillSavedInfo();
+    const API_BASE = "http://localhost:8000";
+    const userEmail = localStorage.getItem("user_email");
+    const cartKey = userEmail ? `farmNaturalsCart_${userEmail}` : null;
 
-      // Load cart items from localStorage
-      const cart = JSON.parse(localStorage.getItem(cartKey)) || [];
-      const orderItems = document.getElementById('orderItems');
-      const subtotalEl = document.getElementById('subtotal');
-      const deliveryEl = document.getElementById('delivery');
-      const totalEl = document.getElementById('total');
-      const deliveryRow = document.getElementById('deliveryRow');
-      const deliveryMessage = document.getElementById('deliveryMessage');
-      const deliveryFee = 49; // Fixed delivery fee
-      const freeDeliveryThreshold = 250; // Free delivery above this amount
+    const cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+    const orderItems = document.getElementById('orderItems');
+    const subtotalEl = document.getElementById('subtotal');
+    const deliveryEl = document.getElementById('delivery');
+    const totalEl = document.getElementById('total');
+    const deliveryRow = document.getElementById('deliveryRow');
+    const deliveryMessage = document.getElementById('deliveryMessage');
+    const deliveryFee = 49;
+    const freeDeliveryThreshold = 250;
 
-      // Payment method toggle
-      document.querySelectorAll('input[name="paymentMethod"]').forEach(radio => {
-        radio.addEventListener('change', function () {
-          document.getElementById('creditCardForm').classList.add('d-none');
-          document.getElementById('upiForm').classList.add('d-none');
-
-          if (this.id === 'creditCard') {
-            document.getElementById('creditCardForm').classList.remove('d-none');
-          } else if (this.id === 'paytm') {
-            document.getElementById('upiForm').classList.remove('d-none');
-          }
-        });
+    document.querySelectorAll('input[name="paymentMethod"]').forEach(radio => {
+      radio.addEventListener('change', function () {
+        document.getElementById('creditCardForm').classList.add('d-none');
+        document.getElementById('upiForm').classList.add('d-none');
+        if (this.id === 'creditCard') {
+          document.getElementById('creditCardForm').classList.remove('d-none');
+        } else if (this.id === 'paytm') {
+          document.getElementById('upiForm').classList.remove('d-none');
+        }
       });
+    });
 
-      // Display cart items
-      if (cart.length === 0) {
-        orderItems.innerHTML = `
-          <div class="alert alert-warning">
-            Your cart is empty. <a href="products.html" class="alert-link">Continue shopping</a>
+    if (cart.length === 0) {
+      orderItems.innerHTML = `
+        <div class="alert alert-warning">
+          Your cart is empty. <a href="products.html" class="alert-link">Continue shopping</a>
+        </div>
+      `;
+      document.getElementById('placeOrderBtn').disabled = true;
+    } else {
+      let html = '';
+      let subtotal = 0;
+
+      cart.forEach(item => {
+        const itemTotal = item.price * item.quantity;
+        subtotal += itemTotal;
+        html += `
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+              <h6 class="mb-0">${item.name}</h6>
+              <small class="text-muted">₹${item.price.toFixed(2)} × ${item.quantity}</small>
+            </div>
+            <div class="text-end">
+              <div class="fw-bold">₹${itemTotal.toFixed(2)}</div>
+            </div>
           </div>
         `;
-        document.getElementById('placeOrderBtn').disabled = true;
+      });
+
+      orderItems.innerHTML = html;
+
+      let delivery = 0;
+      if (subtotal < freeDeliveryThreshold) {
+        delivery = deliveryFee;
+        deliveryRow.classList.remove('d-none');
+        deliveryMessage.innerHTML = `<span class="text-muted">Add ₹${(freeDeliveryThreshold - subtotal).toFixed(2)} more for free delivery</span>`;
       } else {
-        let html = '';
-        let subtotal = 0;
-
-        cart.forEach(item => {
-          const itemTotal = item.price * item.quantity;
-          subtotal += itemTotal;
-
-          html += `
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <div>
-                <h6 class="mb-0">${item.name}</h6>
-                <small class="text-muted">₹${item.price.toFixed(2)} × ${item.quantity}</small>
-              </div>
-              <div class="text-end">
-                <div class="fw-bold">₹${itemTotal.toFixed(2)}</div>
-              </div>
-            </div>
-          `;
-        });
-
-        orderItems.innerHTML = html;
-
-        // Calculate delivery fee (only if subtotal < 250)
-        let delivery = 0;
-        if (subtotal < freeDeliveryThreshold) {
-          delivery = deliveryFee;
-          deliveryRow.classList.remove('d-none');
-          deliveryMessage.innerHTML = `<span class="text-muted">Add ₹${(freeDeliveryThreshold - subtotal).toFixed(2)} more for free delivery</span>`;
-        } else {
-          deliveryRow.classList.add('d-none');
-          deliveryMessage.innerHTML = `<span class="free-delivery">Free delivery on orders above ₹${freeDeliveryThreshold}</span>`;
-        }
-
-        // Calculate total
-        const total = subtotal + delivery;
-
-        subtotalEl.textContent = `₹${subtotal.toFixed(2)}`;
-        deliveryEl.textContent = `₹${delivery.toFixed(2)}`;
-        totalEl.textContent = `₹${total.toFixed(2)}`;
-
-        // Store complete order data for confirmation page
-        const orderData = {
-          items: cart,
-          subtotal: subtotal.toFixed(2),
-          deliveryFee: delivery.toFixed(2),
-          total: total.toFixed(2),
-          orderNumber: 'FN-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000),
-          orderDate: new Date().toLocaleDateString('en-IN', {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-          }),
-          deliveryDate: calculateDeliveryDate()
-        };
-        localStorage.setItem('orderData', JSON.stringify(orderData));
+        deliveryRow.classList.add('d-none');
+        deliveryMessage.innerHTML = `<span class="free-delivery">Free delivery on orders above ₹${freeDeliveryThreshold}</span>`;
       }
 
-      // Calculate delivery date (3 days from now)
-      function calculateDeliveryDate() {
-        const deliveryDate = new Date();
-        deliveryDate.setDate(deliveryDate.getDate() + 3);
-        return deliveryDate.toLocaleDateString('en-IN', {
-          weekday: 'long',
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric'
-        });
-      }
+      const total = subtotal + delivery;
 
-      // Place order button
-      document.getElementById('placeOrderBtn').addEventListener('click', async function () {
-        if (!userEmail) {
-          showToast('Please login to place an order');
-          return;
-        }
+      subtotalEl.textContent = `₹${subtotal.toFixed(2)}`;
+      deliveryEl.textContent = `₹${delivery.toFixed(2)}`;
+      totalEl.textContent = `₹${total.toFixed(2)}`;
 
-        // Validate form
-        const form = document.getElementById('deliveryForm');
-        if (!form.checkValidity()) {
-          form.classList.add('was-validated');
-          return;
-        }
+      const orderData = {
+        items: cart,
+        subtotal: subtotal.toFixed(2),
+        deliveryFee: delivery.toFixed(2),
+        total: total.toFixed(2),
+        orderNumber: 'FN-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000),
+        orderDate: new Date().toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
+        deliveryDate: calculateDeliveryDate()
+      };
+      localStorage.setItem('orderData', JSON.stringify(orderData));
+    }
 
-        // Validate payment method if not COD
-        const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').id;
-        if (paymentMethod === 'creditCard') {
-          if (!validateCreditCardForm()) {
-            return;
-          }
-        } else if (paymentMethod === 'paytm') {
-          if (!validateUPIForm()) {
-            return;
-          }
-        }
-
-        // Get delivery details from form
-        const deliveryDetails = {
-          name: document.getElementById('firstName').value + ' ' + document.getElementById('lastName').value,
-          email: document.getElementById('email').value,
-          phone: document.getElementById('phone').value,
-          address: document.getElementById('address').value,
-          city: document.getElementById('city').value,
-          state: document.getElementById('state').value,
-          zip: document.getElementById('zip').value,
-          paymentMethod: paymentMethod
-        };
-
-        // Get order data
-        const orderData = JSON.parse(localStorage.getItem('orderData'));
-        orderData.deliveryDetails = deliveryDetails;
-        orderData.paymentMethod = paymentMethod;
-        
-        try {
-          // Submit order to server
-          const response = await fetch(`${API_BASE}/orders/create?email=${encodeURIComponent(userEmail)}`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              email: userEmail,
-              orderData: orderData,
-              cart: cart
-            })
-          });
-
-          const data = await response.json();
-          
-          if (!response.ok) {
-            showToast(data.detail || "Error placing order");
-            return;
-          }
-
-          // Clear cart on successful order
-          localStorage.removeItem(cartKey);
-          localStorage.setItem('orderData', JSON.stringify(orderData));
-          
-          // Redirect to confirmation page
-          window.location.href = 'confirmation.html';
-          
-        } catch (error) {
-          showToast("Error connecting to server");
-          console.error(error);
-        }
+    function calculateDeliveryDate() {
+      const deliveryDate = new Date();
+      deliveryDate.setDate(deliveryDate.getDate() + 3);
+      return deliveryDate.toLocaleDateString('en-IN', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
       });
+    }
 
-      function validateCreditCardForm() {
-        const form = document.getElementById('creditCardForm');
-        const inputs = form.querySelectorAll('input[required]');
-        let isValid = true;
+    document.getElementById('placeOrderBtn').addEventListener('click', async function () {
+      if (!userEmail) {
+        showToast('Please login to place an order');
+        return;
+      }
 
-        inputs.forEach(input => {
-          if (!input.value.trim()) {
-            input.classList.add('is-invalid');
-            isValid = false;
-          } else {
-            input.classList.remove('is-invalid');
-          }
+      const form = document.getElementById('deliveryForm');
+      if (!form.checkValidity()) {
+        form.classList.add('was-validated');
+        return;
+      }
+
+      const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').id;
+      if (paymentMethod === 'creditCard') {
+        if (!validateCreditCardForm()) return;
+      } else if (paymentMethod === 'paytm') {
+        if (!validateUPIForm()) return;
+      }
+
+      const deliveryDetails = {
+        name: document.getElementById('firstName').value + ' ' + document.getElementById('lastName').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        address: document.getElementById('address').value,
+        city: document.getElementById('city').value,
+        state: document.getElementById('state').value,
+        zip: document.getElementById('zip').value,
+        paymentMethod: paymentMethod
+      };
+ const saveInfo = document.getElementById("saveInfo").checked;
+if (saveInfo) {
+  localStorage.setItem("savedDeliveryInfo", JSON.stringify(deliveryDetails));
+}
+
+      const orderData = JSON.parse(localStorage.getItem('orderData'));
+      orderData.deliveryDetails = deliveryDetails;
+      orderData.paymentMethod = paymentMethod;
+      const orderNumber = orderData.orderNumber;
+
+      try {
+        const response = await fetch(`${API_BASE}/orders/create`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: userEmail,
+            orderData: orderData,
+            cart: cart,
+            payment_method: paymentMethod
+          })
         });
 
-        return isValid;
-      }
+        const data = await response.json();
 
-      function validateUPIForm() {
-        const upiId = document.getElementById('upiId');
-        if (!upiId.value.trim()) {
-          upiId.classList.add('is-invalid');
-          return false;
+        if (!response.ok) {
+          showToast(data.detail || "Error placing order");
+          return;
         }
-        upiId.classList.remove('is-invalid');
-        return true;
-      }
 
-      function showToast(message) {
-        const toast = document.createElement('div');
-        toast.className = 'position-fixed bottom-0 end-0 p-3';
-        toast.style.zIndex = '11';
-        toast.innerHTML = `
-          <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header bg-success text-white">
-              <strong class="me-auto">FarmNaturals</strong>
-              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+        localStorage.removeItem(cartKey);
+        localStorage.setItem("pendingOrderId", orderNumber);
+        localStorage.setItem("orderData", JSON.stringify(orderData));
+
+        document.body.innerHTML = `
+          <div class="container mt-5">
+            <div class="alert alert-info text-center">
+              <h4>⏳ Your order has been placed!</h4>
+              <p>Waiting for admin to confirm your order <strong>${orderNumber}</strong>...</p>
             </div>
-            <div class="toast-body">${message}</div>
           </div>
         `;
-        document.body.appendChild(toast);
-        setTimeout(() => toast.remove(), 3000);
+
+        const checkConfirmation = setInterval(() => {
+          fetch(`${API_BASE}/orders/status/${orderNumber}`)
+            .then(res => res.json())
+            .then(statusData => {
+              if (statusData.status === "Confirmed") {
+                clearInterval(checkConfirmation);
+                window.location.href = "confirmation.html";
+              }
+            });
+        }, 5000);
+
+      } catch (error) {
+        showToast("Error connecting to server");
+        console.error(error);
       }
     });
+
+    function validateCreditCardForm() {
+      const form = document.getElementById('creditCardForm');
+      const inputs = form.querySelectorAll('input[required]');
+      let isValid = true;
+      inputs.forEach(input => {
+        if (!input.value.trim()) {
+          input.classList.add('is-invalid');
+          isValid = false;
+        } else {
+          input.classList.remove('is-invalid');
+        }
+      });
+      return isValid;
+    }
+
+    function validateUPIForm() {
+      const upiId = document.getElementById('upiId');
+      if (!upiId.value.trim()) {
+        upiId.classList.add('is-invalid');
+        return false;
+      }
+      upiId.classList.remove('is-invalid');
+      return true;
+    }
+
+    function showToast(message) {
+      const toast = document.createElement('div');
+      toast.className = 'position-fixed bottom-0 end-0 p-3';
+      toast.style.zIndex = '11';
+      toast.innerHTML = `
+        <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="toast-header bg-success text-white">
+            <strong class="me-auto">FarmNaturals</strong>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+          <div class="toast-body">${message}</div>
+        </div>
+      `;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+  });
+  async function loadUserOrders() {
+  const email = localStorage.getItem("user_email");
+  if (!email) return;
+
+  try {
+    const res = await fetch(`http://localhost:8000/orders/user/${email}`);
+    const orders = await res.json();
+
+    if (orders.length === 0) return;
+
+    let html = `
+      <h5 class="mt-5">Your Orders</h5>
+      <ul class="list-group mb-4">
+    `;
+
+    orders.forEach(order => {
+      html += `
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <div>
+            <strong>Order #${order.order_number}</strong><br>
+            Status: <span class="badge bg-${order.status === 'Confirmed' ? 'success' : 'warning'}">${order.status}</span>
+          </div>
+          <span>Total: ₹${order.total_amount}</span>
+        </li>
+      `;
+    });
+
+    html += `</ul>`;
+
+    document.querySelector(".card-body").insertAdjacentHTML("beforeend", html);
+  } catch (err) {
+    console.error("Error fetching user orders:", err);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", loadUserOrders);
+
+function autofillSavedInfo() {
+  const savedInfo = JSON.parse(localStorage.getItem("savedDeliveryInfo"));
+  if (!savedInfo) return;
+
+  const [firstName, ...lastNameParts] = savedInfo.name.split(" ");
+  document.getElementById("firstName").value = firstName || "";
+  document.getElementById("lastName").value = lastNameParts.join(" ") || "";
+  document.getElementById("email").value = savedInfo.email || "";
+  document.getElementById("phone").value = savedInfo.phone || "";
+  document.getElementById("address").value = savedInfo.address || "";
+  document.getElementById("city").value = savedInfo.city || "";
+  document.getElementById("state").value = savedInfo.state || "";
+  document.getElementById("zip").value = savedInfo.zip || "";
+  document.getElementById("saveInfo").checked = true;
+}
+
 </script>
+
+
 </body>
 
 </html>
